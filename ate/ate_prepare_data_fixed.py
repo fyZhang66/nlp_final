@@ -1,5 +1,3 @@
-
-
 import xml.etree.ElementTree as ET
 import random
 from datasets import Dataset, DatasetDict
@@ -45,9 +43,12 @@ def tokenize_and_bio(sentence_text: str, aspect_terms: list[dict]) -> tuple[list
         # Check overlap with aspect spans
         overlap = token_chars & set(aspect_chars.keys())
         if overlap:
-            # Check if this is B- (first token of aspect) or I-
+            # BIO fix:
+            # If the previous character is not inside the same aspect span,
+            # this token starts a new aspect -> B-ASP
+            # Otherwise it continues the current aspect -> I-ASP
             min_char = min(overlap)
-            if min_char == i or (min_char - 1) not in aspect_chars:
+            if (min_char - 1) not in aspect_chars:
                 tags.append("B-ASP")
             else:
                 tags.append("I-ASP")
@@ -75,9 +76,9 @@ def parse_xml(xml_path: str) -> list[dict]:
         at_el = sentence.find("aspectTerms")
         if at_el is not None:
             for at in at_el.findall("aspectTerm"):
-                term  = at.get("term", "")
-                frm   = at.get("from", "0")
-                to    = at.get("to", "0")
+                term = at.get("term", "")
+                frm = at.get("from", "0")
+                to = at.get("to", "0")
                 if term:
                     aspect_terms.append({"term": term, "from": frm, "to": to})
 
@@ -89,22 +90,22 @@ def parse_xml(xml_path: str) -> list[dict]:
 
 
 def main():
-    print("Parsing training XML …")
+    print("Parsing training XML ...")
     train_all = parse_xml(TRAIN_XML)
 
-    print("Parsing test XML …")
+    print("Parsing test XML ...")
     test_data = parse_xml(TEST_XML)
 
-    # Split train → 90% train / 10% val
+    # Split train -> 90% train / 10% val
     random.shuffle(train_all)
     split = int(0.9 * len(train_all))
     train_data = train_all[:split]
-    val_data   = train_all[split:]
+    val_data = train_all[split:]
 
     dataset = DatasetDict({
-        "train":      Dataset.from_list(train_data),
+        "train": Dataset.from_list(train_data),
         "validation": Dataset.from_list(val_data),
-        "test":       Dataset.from_list(test_data),
+        "test": Dataset.from_list(test_data),
     })
 
     dataset.save_to_disk("ate_data")
