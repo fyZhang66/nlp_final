@@ -2,3 +2,4 @@
 *.safetensors
 training_args.bin
 __pycache__/
+.venv/
