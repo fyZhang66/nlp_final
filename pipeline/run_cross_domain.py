@@ -53,6 +53,8 @@ def run_all_experiments(output_dir=None):
     if output_dir is None:
         output_dir = OUTPUT_DIR
 
+    os.makedirs(output_dir, exist_ok=True)
+
     all_metrics = []
     skipped = []
 
