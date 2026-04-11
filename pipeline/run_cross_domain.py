@@ -4,6 +4,12 @@ Usage (run from project root)::
 
     python -m pipeline.run_cross_domain
     python -m pipeline.run_cross_domain --output_dir pipeline/outputs
+    python -m pipeline.run_cross_domain --skip_figures
+
+After a successful run, figures are written to ``pipeline/figures`` (see
+``pipeline.config.FIGURES_DIR``). Regenerate figures only::
+
+    python -m pipeline.plot_figures
 
 The script automatically skips experiments whose data or models are not yet
 available, so it is safe to run at any stage of the project.
@@ -16,7 +22,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from pipeline.config import RAW_DATA, MODELS, OUTPUT_DIR
+from pipeline.config import FIGURES_DIR, RAW_DATA, MODELS, OUTPUT_DIR
+from pipeline.plot_figures import generate_pipeline_figures
 from pipeline.run_pipeline import run_pipeline
 from pipeline.error_analysis import run_full_error_analysis
 
@@ -49,7 +56,7 @@ def _check_resources(train_dom, test_dom, model_name):
     return missing, test_xml, ate_dir, asc_dir
 
 
-def run_all_experiments(output_dir=None):
+def run_all_experiments(output_dir=None, skip_figures: bool = False):
     if output_dir is None:
         output_dir = OUTPUT_DIR
 
@@ -121,6 +128,9 @@ def run_all_experiments(output_dir=None):
 
     if skipped:
         print(f"Skipped experiments: {skipped}")
+
+    if not skip_figures:
+        generate_pipeline_figures(output_dir=output_dir, figures_dir=FIGURES_DIR)
 
     return all_metrics
 
@@ -217,8 +227,13 @@ def _print_summary(all_metrics):
 def main():
     ap = argparse.ArgumentParser(description="Cross-Domain Experiments")
     ap.add_argument("--output_dir", default=None)
+    ap.add_argument(
+        "--skip_figures",
+        action="store_true",
+        help="Do not generate matplotlib figures under pipeline/figures (see config FIGURES_DIR).",
+    )
     args = ap.parse_args()
-    run_all_experiments(args.output_dir)
+    run_all_experiments(args.output_dir, skip_figures=args.skip_figures)
 
 
 if __name__ == "__main__":

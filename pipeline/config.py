@@ -117,6 +117,9 @@ BACKBONE_PRESETS: dict[str, dict] = {
 # ---------------------------------------------------------------------------
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "pipeline", "outputs")
 
+# Figures (matplotlib) — written by ``pipeline.plot_figures`` after cross-domain runs
+FIGURES_DIR = os.path.join(PROJECT_ROOT, "pipeline", "figures")
+
 # ---------------------------------------------------------------------------
 # Label constants (kept consistent with upstream modules)
 # ---------------------------------------------------------------------------
