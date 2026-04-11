@@ -31,8 +31,8 @@ RAW_DATA = {
 MODELS = {
     "restaurant": {
         "bert": {
-            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output", "final"),
-            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output", "final"),
+            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_bert", "final"),
+            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_bert", "final"),
         },
         "deberta": {
             "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_deberta", "final"),
@@ -41,8 +41,8 @@ MODELS = {
     },
     "laptop": {
         "bert": {
-            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_laptop", "final"),
-            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_laptop", "final"),
+            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_laptop_bert", "final"),
+            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_laptop_bert", "final"),
         },
         "deberta": {
             "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_laptop_deberta", "final"),
