@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 from pathlib import Path
@@ -29,6 +28,7 @@ from pipeline.config import (  # noqa: E402
     ate_training_run_dir,
     hf_ate_dataset_dir,
 )
+from pipeline.test_results import write_test_results  # noqa: E402
 
 LABEL_LIST = ["O", "B-ASP", "I-ASP"]
 LABEL2ID = {l: i for i, l in enumerate(LABEL_LIST)}
@@ -174,8 +174,24 @@ def train_ate(domain: str, model_name: str) -> None:
     print(f"Test Precision: {results['eval_precision']:.4f}")
     print(f"Test Recall:    {results['eval_recall']:.4f}")
 
-    with open(os.path.join(output_dir, "test_results.json"), "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
+    extras = {
+        k: results[k]
+        for k in ("epoch", "eval_runtime", "eval_samples_per_second", "eval_steps_per_second")
+        if k in results
+    }
+    write_test_results(
+        output_dir,
+        task="ate",
+        domain=domain,
+        model=model_name,
+        metrics={
+            "loss": results["eval_loss"],
+            "f1": results["eval_f1"],
+            "precision": results["eval_precision"],
+            "recall": results["eval_recall"],
+        },
+        extras=extras or None,
+    )
 
 
 def main():

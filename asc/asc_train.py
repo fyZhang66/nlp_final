@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 from pathlib import Path
@@ -23,6 +22,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from pipeline.config import BACKBONE_PRESETS, MAX_LEN, asc_training_run_dir, hf_asc_dataset_dir  # noqa: E402
+from pipeline.test_results import write_test_results  # noqa: E402
 
 NUM_LABELS = 3
 LABEL_NAMES = ["positive", "negative", "neutral"]
@@ -127,16 +127,17 @@ def train_asc(domain: str, model_name: str) -> None:
     report = classification_report(y_true, y_pred, target_names=LABEL_NAMES)
     print(f"\nClassification Report:\n{report}")
 
-    with open(os.path.join(output_dir, "test_results.json"), "w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "accuracy": results["eval_accuracy"],
-                "macro_f1": results["eval_macro_f1"],
-                "report": report,
-            },
-            f,
-            indent=2,
-        )
+    write_test_results(
+        output_dir,
+        task="asc",
+        domain=domain,
+        model=model_name,
+        metrics={
+            "accuracy": results["eval_accuracy"],
+            "macro_f1": results["eval_macro_f1"],
+        },
+        extras={"classification_report": report},
+    )
 
 
 def main():

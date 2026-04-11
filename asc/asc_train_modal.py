@@ -132,14 +132,22 @@ def train():
     report = classification_report(y_true, y_pred, target_names=LABEL_NAMES)
     print(f"\nClassification Report:\n{report}")
 
+    # Keep in sync with pipeline.test_results.write_test_results (Modal image has no repo import).
     output = {
-        "accuracy": results["eval_accuracy"],
-        "macro_f1": results["eval_macro_f1"],
-        "report": report,
+        "schema_version": 1,
+        "task": "asc",
+        "domain": "restaurant",
+        "model": "bert",
+        "split": "test",
+        "metrics": {
+            "accuracy": results["eval_accuracy"],
+            "macro_f1": results["eval_macro_f1"],
+        },
+        "extras": {"classification_report": report},
     }
 
-    with open(os.path.join(OUTPUT_DIR, "test_results.json"), "w") as f:
-        json.dump(output, f, indent=2)
+    with open(os.path.join(OUTPUT_DIR, "test_results.json"), "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
 
     output_vol.commit()
     return output
@@ -160,7 +168,8 @@ def main():
     result = train.remote()
     print("\n" + "=" * 40)
     print("Training complete!")
-    print(f"Accuracy: {result['accuracy']:.4f}")
-    print(f"Macro-F1: {result['macro_f1']:.4f}")
-    print(f"\n{result['report']}")
+    m = result["metrics"]
+    print(f"Accuracy: {m['accuracy']:.4f}")
+    print(f"Macro-F1: {m['macro_f1']:.4f}")
+    print(f"\n{result['extras']['classification_report']}")
     print("Model saved to Modal volume 'asc-output'")
