@@ -31,12 +31,12 @@ RAW_DATA = {
 MODELS = {
     "restaurant": {
         "bert": {
-            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_bert", "final"),
-            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_bert", "final"),
+            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_restaurant_bert", "final"),
+            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_restaurant_bert", "final"),
         },
         "deberta": {
-            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_deberta", "final"),
-            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_deberta", "final"),
+            "ate": os.path.join(PROJECT_ROOT, "ate", "ate_output_restaurant_deberta", "final"),
+            "asc": os.path.join(PROJECT_ROOT, "asc", "asc_output_restaurant_deberta", "final"),
         },
     },
     "laptop": {

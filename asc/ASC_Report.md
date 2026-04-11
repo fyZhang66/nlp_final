@@ -138,5 +138,5 @@ python asc_train.py              # local
 modal run asc_train_modal.py     # Modal cloud (T4 GPU)
 
 # Step 3: Evaluate
-python asc_evaluate.py --model_dir asc_output_bert/final
+python asc_evaluate.py --model_dir asc_output_restaurant_bert/final
 ```

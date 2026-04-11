@@ -44,7 +44,7 @@ def train():
 
     MODEL_NAME = "bert-base-uncased"
     DATA_PATH = "/data/asc_data_restaurant"
-    OUTPUT_DIR = "/output/asc_output_bert"
+    OUTPUT_DIR = "/output/asc_output_restaurant_bert"
     MAX_LEN = 128
     NUM_LABELS = 3
     LABEL_NAMES = ["positive", "negative", "neutral"]

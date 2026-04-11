@@ -3,8 +3,8 @@
 Usage (run from project root)::
 
     python -m pipeline.run_pipeline \\
-        --ate_model_dir ate/ate_output_bert/final \\
-        --asc_model_dir asc/asc_output_bert/final \\
+        --ate_model_dir ate/ate_output_restaurant_bert/final \\
+        --asc_model_dir asc/asc_output_restaurant_bert/final \\
         --test_xml      data/Restaurants_Test_Gold.xml \\
         --domain        restaurant \\
         --model_name    bert \\
