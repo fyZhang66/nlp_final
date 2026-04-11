@@ -23,7 +23,7 @@ Given a sentence and a specific aspect term within it, classify the sentiment po
 
 ### 2.1 Source
 
-Gold aspect term annotations from **SemEval-2014 Task 4** `Restaurants_Train.xml`. Each `<aspectTerm>` element provides the term text and its polarity label.
+Gold aspect term annotations from **SemEval-2014 Task 4** `data/Restaurants_Train_v2.xml` (train/val pool) and `data/Restaurants_Test_Gold.xml` (official test). Each `<aspectTerm>` element provides the term text and its polarity label.
 
 ### 2.2 Label Mapping
 
@@ -39,13 +39,13 @@ Gold aspect term annotations from **SemEval-2014 Task 4** `Restaurants_Train.xml
 
 ### 2.3 Data Split
 
-Since the official SemEval-2014 test set does not include polarity labels for aspect terms, the labeled training data was split randomly (seed=42):
+Sentences from `Restaurants_Train_v2.xml` are split **by `sentence_id`** into train vs. validation (10% val, seed=42), shared with the ATE pipeline. The **test** set is the full official **`Restaurants_Test_Gold.xml`** (aspect-level polarity labels). Aspect-level counts:
 
-| Split | Size | Proportion |
-|-------|------|------------|
-| Train | 2,881 | 80% |
-| Validation | 360 | 10% |
-| Test | 361 | 10% |
+| Split | Examples (aspect pairs) | Notes |
+|-------|-------------------------|--------|
+| Train | 3,220 | aspects from train split sentences |
+| Validation | 382 | aspects from val split sentences |
+| Test | 1,120 | all labeled aspects in Gold test |
 
 ### 2.4 Input Construction
 
