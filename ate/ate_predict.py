@@ -64,7 +64,7 @@ def predict_aspects(model, tokenizer, tokens, device):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_dir", required=True)
-    parser.add_argument("--data_dir", default="ate_data")
+    parser.add_argument("--data_dir", default="ate_data_restaurant")
     parser.add_argument("--output", default="ate_predictions.json")
     args = parser.parse_args()
 

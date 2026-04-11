@@ -12,7 +12,7 @@ from sklearn.metrics import accuracy_score, f1_score, classification_report
 
 # ── Config ────────────────────────────────────────────────────
 MODEL_NAME = "bert-base-uncased"
-DATA_PATH = "asc_data"
+DATA_PATH = "asc_data_restaurant"
 OUTPUT_DIR = "./asc_output"
 MAX_LEN = 128
 NUM_LABELS = 3

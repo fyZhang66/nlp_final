@@ -69,7 +69,7 @@ def predict(model, tokenizer, dataset, device, batch_size=16):   # smaller batch
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_dir", required=True)
-    parser.add_argument("--data_dir",  default="ate_data")
+    parser.add_argument("--data_dir",  default="ate_data_restaurant")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

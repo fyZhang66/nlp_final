@@ -5,7 +5,7 @@ Usage (run from project root)::
     python -m pipeline.run_pipeline \\
         --ate_model_dir ate/ate_output/final \\
         --asc_model_dir asc/asc_output/final \\
-        --test_xml      ate/Restaurants_Test.xml \\
+        --test_xml      data/Restaurants_Test_Gold.xml \\
         --domain        restaurant \\
         --model_name    bert \\
         --output_dir    pipeline/outputs

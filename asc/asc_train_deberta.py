@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, f1_score, classification_report
 # ── Config ────────────────────────────────────────────────────
 # Changed from bert-base-uncased to DeBERTa-base
 MODEL_NAME = "microsoft/deberta-base"
-DATA_PATH  = "asc_data"
+DATA_PATH  = "asc_data_restaurant"
 OUTPUT_DIR = "./asc_output_deberta"
 MAX_LEN    = 128
 NUM_LABELS = 3

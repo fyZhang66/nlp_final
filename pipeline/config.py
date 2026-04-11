@@ -2,19 +2,21 @@
 
 import os
 
+from pipeline.semeval_data import DATA_XML
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ---------------------------------------------------------------------------
-# Raw XML data (SemEval 2014 Task 4)
+# Raw XML data (SemEval 2014 Task 4) — same files as ``ate_prepare`` / ``asc_prepare``
 # ---------------------------------------------------------------------------
 RAW_DATA = {
     "restaurant": {
-        "train_xml": os.path.join(PROJECT_ROOT, "ate", "Restaurants_Train.xml"),
-        "test_xml":  os.path.join(PROJECT_ROOT, "ate", "Restaurants_Test.xml"),
+        "train_xml": DATA_XML["restaurant"]["train"],
+        "test_xml":  DATA_XML["restaurant"]["test"],
     },
     "laptop": {
-        "train_xml": os.path.join(PROJECT_ROOT, "ate", "Laptops_Train.xml"),
-        "test_xml":  os.path.join(PROJECT_ROOT, "ate", "Laptops_Test.xml"),
+        "train_xml": DATA_XML["laptop"]["train"],
+        "test_xml":  DATA_XML["laptop"]["test"],
     },
 }
 

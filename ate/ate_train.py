@@ -13,7 +13,7 @@ from seqeval.metrics import f1_score, precision_score, recall_score
 
 # ── Config ────────────────────────────────────────────────────
 MODEL_NAME = "bert-base-uncased"
-DATA_PATH = "ate_data"
+DATA_PATH = "ate_data_restaurant"
 OUTPUT_DIR = "./ate_output"
 MAX_LEN = 128
 

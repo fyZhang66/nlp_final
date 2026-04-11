@@ -43,7 +43,7 @@ def train():
     from sklearn.metrics import accuracy_score, f1_score, classification_report
 
     MODEL_NAME = "bert-base-uncased"
-    DATA_PATH = "/data/asc_data"
+    DATA_PATH = "/data/asc_data_restaurant"
     OUTPUT_DIR = "/output/asc_output"
     MAX_LEN = 128
     NUM_LABELS = 3
@@ -149,11 +149,11 @@ def train():
 def main():
     # Upload local dataset to Modal volume
     print("Uploading dataset to Modal volume ...")
-    local_data_dir = os.path.join(os.path.dirname(__file__), "asc_data")
+    local_data_dir = os.path.join(os.path.dirname(__file__), "asc_data_restaurant")
 
     vol = modal.Volume.from_name("asc-data", create_if_missing=True)
     with vol.batch_upload() as batch:
-        batch.put_directory(local_data_dir, "/asc_data")
+        batch.put_directory(local_data_dir, "/asc_data_restaurant")
     print("Upload complete.")
 
     # Run training

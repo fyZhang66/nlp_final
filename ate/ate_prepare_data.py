@@ -1,12 +1,15 @@
-import xml.etree.ElementTree as ET
-import random
+import argparse
+import os
+import sys
+
 from datasets import Dataset, DatasetDict
 
-SEED = 42
-random.seed(SEED)
+# Project root on path for ``pipeline.semeval_data``
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
 
-TRAIN_XML = "Restaurants_Train.xml"
-TEST_XML  = "Restaurants_Test.xml"
+from pipeline.semeval_data import get_train_val_ids, load_sentences  # noqa: E402
 
 
 def tokenize_and_bio(sentence_text: str, aspect_terms: list[dict]) -> tuple[list, list]:
@@ -15,38 +18,27 @@ def tokenize_and_bio(sentence_text: str, aspect_terms: list[dict]) -> tuple[list
     aspect_terms: list of {"term": str, "from": int, "to": int}
     Returns: (tokens, bio_tags)
     """
-    # Build character-level aspect span set
-    aspect_chars = {}
+    aspect_chars: dict[int, str] = {}
     for asp in aspect_terms:
         for i in range(int(asp["from"]), int(asp["to"])):
             aspect_chars[i] = asp["term"]
 
-    # Tokenize by whitespace, tracking char positions
     tokens, tags = [], []
-    i = 0
     text = sentence_text
+    i = 0
 
     while i < len(text):
-        # Skip spaces
         if text[i] == " ":
             i += 1
             continue
-
-        # Find end of token
         j = i
         while j < len(text) and text[j] != " ":
             j += 1
 
         token = text[i:j]
         token_chars = set(range(i, j))
-
-        # Check overlap with aspect spans
         overlap = token_chars & set(aspect_chars.keys())
         if overlap:
-            # BIO fix:
-            # If the previous character is not inside the same aspect span,
-            # this token starts a new aspect -> B-ASP
-            # Otherwise it continues the current aspect -> I-ASP
             min_char = min(overlap)
             if (min_char - 1) not in aspect_chars:
                 tags.append("B-ASP")
@@ -61,59 +53,71 @@ def tokenize_and_bio(sentence_text: str, aspect_terms: list[dict]) -> tuple[list
     return tokens, tags
 
 
-def parse_xml(xml_path: str) -> list[dict]:
-    tree = ET.parse(xml_path)
-    root = tree.getroot()
-    examples = []
+def _sentence_to_ate_example(sent: dict) -> dict | None:
+    aspect_terms = [
+        {"term": a["term"], "from": a["from"], "to": a["to"]}
+        for a in sent["aspects"]
+    ]
+    tokens, tags = tokenize_and_bio(sent["text"], aspect_terms)
+    if not tokens:
+        return None
+    return {"tokens": tokens, "tags": tags}
 
-    for sentence in root.findall(".//sentence"):
-        text_el = sentence.find("text")
-        if text_el is None or not text_el.text:
+
+def build_ate_splits(domain: str):
+    train_ids, val_ids, train_path, test_path = get_train_val_ids(domain)
+    train_sents = load_sentences(train_path)
+    test_sents = load_sentences(test_path)
+
+    train_data, val_data = [], []
+    for s in train_sents:
+        sid = s["sentence_id"]
+        ex = _sentence_to_ate_example(s)
+        if ex is None:
             continue
-        text = text_el.text.strip()
+        if sid in train_ids:
+            train_data.append(ex)
+        elif sid in val_ids:
+            val_data.append(ex)
 
-        aspect_terms = []
-        at_el = sentence.find("aspectTerms")
-        if at_el is not None:
-            for at in at_el.findall("aspectTerm"):
-                term = at.get("term", "")
-                frm = at.get("from", "0")
-                to = at.get("to", "0")
-                if term:
-                    aspect_terms.append({"term": term, "from": frm, "to": to})
+    test_data = []
+    for s in test_sents:
+        ex = _sentence_to_ate_example(s)
+        if ex is not None:
+            test_data.append(ex)
 
-        tokens, tags = tokenize_and_bio(text, aspect_terms)
-        if tokens:
-            examples.append({"tokens": tokens, "tags": tags})
-
-    return examples
+    return train_data, val_data, test_data, train_path, test_path
 
 
 def main():
-    print("Parsing training XML ...")
-    train_all = parse_xml(TRAIN_XML)
+    ap = argparse.ArgumentParser(description="ATE SemEval data → HuggingFace Dataset")
+    ap.add_argument(
+        "--domain",
+        choices=["restaurant", "laptop"],
+        default="restaurant",
+        help="restaurant → ate_data_restaurant; laptop → ate_data_laptop",
+    )
+    args = ap.parse_args()
 
-    print("Parsing test XML ...")
-    test_data = parse_xml(TEST_XML)
+    domain = args.domain
+    name = "ate_data_restaurant" if domain == "restaurant" else "ate_data_laptop"
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), name)
 
-    # Split train -> 90% train / 10% val
-    random.shuffle(train_all)
-    split = int(0.9 * len(train_all))
-    train_data = train_all[:split]
-    val_data = train_all[split:]
+    print(f"Domain: {domain}  →  {name}/")
+    train_data, val_data, test_data, train_path, test_path = build_ate_splits(domain)
+    print(f"Train XML: {train_path}")
+    print(f"Test XML:  {test_path}")
 
     dataset = DatasetDict({
         "train": Dataset.from_list(train_data),
         "validation": Dataset.from_list(val_data),
         "test": Dataset.from_list(test_data),
     })
-
-    dataset.save_to_disk("ate_data")
+    dataset.save_to_disk(out_dir)
     print(dataset)
     print(f"\nTrain: {len(train_data)} | Val: {len(val_data)} | Test: {len(test_data)}")
-    print("Saved to: ate_data/")
+    print(f"Saved to: {out_dir}/")
 
-    # Show one example
     ex = train_data[0]
     print("\nExample:")
     for tok, tag in zip(ex["tokens"], ex["tags"]):

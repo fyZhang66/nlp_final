@@ -1,80 +1,92 @@
-import xml.etree.ElementTree as ET
-import random
+import argparse
+import os
+import sys
 from collections import Counter
+
 from datasets import Dataset, DatasetDict
 
-SEED = 42
-random.seed(SEED)
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
 
-TRAIN_XML = "../ate/Restaurants_Train.xml"
+from pipeline.semeval_data import get_train_val_ids, load_sentences  # noqa: E402
 
 POLARITY_MAP = {"positive": 0, "negative": 1, "neutral": 2}
 
 
-def parse_xml(xml_path: str) -> list[dict]:
-    """Extract (sentence, aspect_term, polarity) triples from SemEval XML."""
-    tree = ET.parse(xml_path)
-    examples = []
-
-    for sentence in tree.findall(".//sentence"):
-        text_el = sentence.find("text")
-        if text_el is None or not text_el.text:
+def _triples_from_sentence(sent: dict) -> list[dict]:
+    """(sentence, aspect, label) rows; skip conflict / missing polarity."""
+    text = sent["text"]
+    rows = []
+    for a in sent["aspects"]:
+        pol = a.get("polarity") or ""
+        term = a.get("term", "")
+        if not term or pol not in POLARITY_MAP:
             continue
-        text = text_el.text.strip()
+        rows.append({
+            "sentence": text,
+            "aspect": term,
+            "label": POLARITY_MAP[pol],
+        })
+    return rows
 
-        at_el = sentence.find("aspectTerms")
-        if at_el is None:
+
+def build_asc_splits(domain: str):
+    train_ids, val_ids, train_path, test_path = get_train_val_ids(domain)
+
+    train_data, val_data = [], []
+    for s in load_sentences(train_path):
+        sid = s["sentence_id"]
+        rows = _triples_from_sentence(s)
+        if not rows:
             continue
+        if sid in train_ids:
+            train_data.extend(rows)
+        elif sid in val_ids:
+            val_data.extend(rows)
 
-        for at in at_el.findall("aspectTerm"):
-            term = at.get("term", "")
-            polarity = at.get("polarity", "")
+    test_data: list[dict] = []
+    for s in load_sentences(test_path):
+        test_data.extend(_triples_from_sentence(s))
 
-            if not term or polarity not in POLARITY_MAP:
-                continue  # skip "conflict" and empty labels
-
-            examples.append({
-                "sentence": text,
-                "aspect": term,
-                "label": POLARITY_MAP[polarity],
-            })
-
-    return examples
+    return train_data, val_data, test_data, train_path, test_path
 
 
 def main():
-    print("Parsing training XML ...")
-    all_examples = parse_xml(TRAIN_XML)
-    print(f"Total examples (excluding 'conflict'): {len(all_examples)}")
+    ap = argparse.ArgumentParser(description="ASC SemEval data → HuggingFace Dataset")
+    ap.add_argument(
+        "--domain",
+        choices=["restaurant", "laptop"],
+        default="restaurant",
+        help="restaurant → asc_data_restaurant; laptop → asc_data_laptop",
+    )
+    args = ap.parse_args()
 
-    # Show label distribution
-    labels = [ex["label"] for ex in all_examples]
+    domain = args.domain
+    name = "asc_data_restaurant" if domain == "restaurant" else "asc_data_laptop"
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), name)
+
+    print(f"Domain: {domain}  →  {name}/")
+    train_data, val_data, test_data, train_path, test_path = build_asc_splits(domain)
+    print(f"Train XML: {train_path}")
+    print(f"Test XML:  {test_path}")
+
+    print(f"\nTotal aspect examples — train pool (excluding conflict): {len(train_data) + len(val_data)}")
+    labels = [ex["label"] for ex in train_data + val_data]
     id2label = {v: k for k, v in POLARITY_MAP.items()}
     counts = Counter(labels)
     for lid, name in id2label.items():
         print(f"  {name}: {counts[lid]}")
-
-    # Shuffle and split: 80% train / 10% val / 10% test
-    random.shuffle(all_examples)
-    n = len(all_examples)
-    train_end = int(0.8 * n)
-    val_end = int(0.9 * n)
-
-    train_data = all_examples[:train_end]
-    val_data = all_examples[train_end:val_end]
-    test_data = all_examples[val_end:]
 
     dataset = DatasetDict({
         "train": Dataset.from_list(train_data),
         "validation": Dataset.from_list(val_data),
         "test": Dataset.from_list(test_data),
     })
-
-    dataset.save_to_disk("asc_data")
+    dataset.save_to_disk(out_dir)
     print(f"\nTrain: {len(train_data)} | Val: {len(val_data)} | Test: {len(test_data)}")
-    print("Saved to: asc_data/")
+    print(f"Saved to: {out_dir}/")
 
-    # Show examples
     print("\nSample examples:")
     for ex in train_data[:3]:
         print(f"  [{id2label[ex['label']]:>8}] \"{ex['aspect']}\" in \"{ex['sentence'][:60]}...\"")

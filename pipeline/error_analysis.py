@@ -4,7 +4,7 @@ Usage (standalone, after ``run_pipeline`` has produced E2E predictions)::
 
     python -m pipeline.error_analysis \\
         --e2e_predictions pipeline/outputs/e2e_predictions_restaurant_bert.jsonl \\
-        --test_xml        ate/Restaurants_Test.xml \\
+        --test_xml        data/Restaurants_Test_Gold.xml \\
         --domain          restaurant \\
         --model_name      bert \\
         --output_dir      pipeline/outputs

@@ -14,7 +14,7 @@ from seqeval.metrics import f1_score, precision_score, recall_score
 # ── Config ────────────────────────────────────────────────────
 # Using deberta-base (v1) for stable compatibility with Colab transformers
 MODEL_NAME = "microsoft/deberta-base"
-DATA_PATH  = "ate_data"
+DATA_PATH  = "ate_data_restaurant"
 OUTPUT_DIR = "./ate_output_deberta"
 MAX_LEN    = 128
 
