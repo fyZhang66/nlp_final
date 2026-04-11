@@ -1,0 +1,19 @@
+{
+  "ate": {
+    "precision": 0.6228,
+    "recall": 0.2543,
+    "f1": 0.3611
+  },
+  "asc_gold": {
+    "accuracy": 0.7982,
+    "macro_f1": 0.67
+  },
+  "asc_pred": {
+    "accuracy": 0.8838,
+    "macro_f1": 0.677
+  },
+  "error_propagation_gap": {
+    "accuracy": -0.0856,
+    "macro_f1": -0.007
+  }
+}

@@ -1,0 +1,210 @@
+[
+  {
+    "ate": {
+      "precision": 0.5558,
+      "recall": 0.5658,
+      "f1": 0.5608
+    },
+    "asc_gold": {
+      "accuracy": 0.8304,
+      "macro_f1": 0.7439
+    },
+    "asc_pred": {
+      "accuracy": 0.8483,
+      "macro_f1": 0.7589
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.0179,
+      "macro_f1": -0.015
+    },
+    "experiment": {
+      "id": 1,
+      "train_domain": "restaurant",
+      "test_domain": "restaurant",
+      "model": "bert",
+      "type": "in-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.5691,
+      "recall": 0.5828,
+      "f1": 0.5759
+    },
+    "asc_gold": {
+      "accuracy": 0.842,
+      "macro_f1": 0.7481
+    },
+    "asc_pred": {
+      "accuracy": 0.8405,
+      "macro_f1": 0.7288
+    },
+    "error_propagation_gap": {
+      "accuracy": 0.0015,
+      "macro_f1": 0.0193
+    },
+    "experiment": {
+      "id": 2,
+      "train_domain": "restaurant",
+      "test_domain": "restaurant",
+      "model": "deberta",
+      "type": "in-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.3244,
+      "recall": 0.2098,
+      "f1": 0.2548
+    },
+    "asc_gold": {
+      "accuracy": 0.7618,
+      "macro_f1": 0.7204
+    },
+    "asc_pred": {
+      "accuracy": 0.7852,
+      "macro_f1": 0.7192
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.0234,
+      "macro_f1": 0.0012
+    },
+    "experiment": {
+      "id": 3,
+      "train_domain": "restaurant",
+      "test_domain": "laptop",
+      "model": "bert",
+      "type": "cross-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.4116,
+      "recall": 0.2681,
+      "f1": 0.3247
+    },
+    "asc_gold": {
+      "accuracy": 0.7947,
+      "macro_f1": 0.744
+    },
+    "asc_pred": {
+      "accuracy": 0.8198,
+      "macro_f1": 0.732
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.0251,
+      "macro_f1": 0.012
+    },
+    "experiment": {
+      "id": 4,
+      "train_domain": "restaurant",
+      "test_domain": "laptop",
+      "model": "deberta",
+      "type": "cross-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.6605,
+      "recall": 0.1603,
+      "f1": 0.2579
+    },
+    "asc_gold": {
+      "accuracy": 0.8018,
+      "macro_f1": 0.6899
+    },
+    "asc_pred": {
+      "accuracy": 0.9218,
+      "macro_f1": 0.8283
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.12,
+      "macro_f1": -0.1384
+    },
+    "experiment": {
+      "id": 5,
+      "train_domain": "laptop",
+      "test_domain": "restaurant",
+      "model": "bert",
+      "type": "cross-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.6228,
+      "recall": 0.2543,
+      "f1": 0.3611
+    },
+    "asc_gold": {
+      "accuracy": 0.7982,
+      "macro_f1": 0.67
+    },
+    "asc_pred": {
+      "accuracy": 0.8838,
+      "macro_f1": 0.677
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.0856,
+      "macro_f1": -0.007
+    },
+    "experiment": {
+      "id": 6,
+      "train_domain": "laptop",
+      "test_domain": "restaurant",
+      "model": "deberta",
+      "type": "cross-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.5097,
+      "recall": 0.5379,
+      "f1": 0.5234
+    },
+    "asc_gold": {
+      "accuracy": 0.7571,
+      "macro_f1": 0.6971
+    },
+    "asc_pred": {
+      "accuracy": 0.7755,
+      "macro_f1": 0.6895
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.0184,
+      "macro_f1": 0.0076
+    },
+    "experiment": {
+      "id": 7,
+      "train_domain": "laptop",
+      "test_domain": "laptop",
+      "model": "bert",
+      "type": "in-domain"
+    }
+  },
+  {
+    "ate": {
+      "precision": 0.5452,
+      "recall": 0.5521,
+      "f1": 0.5486
+    },
+    "asc_gold": {
+      "accuracy": 0.7947,
+      "macro_f1": 0.7547
+    },
+    "asc_pred": {
+      "accuracy": 0.8011,
+      "macro_f1": 0.7436
+    },
+    "error_propagation_gap": {
+      "accuracy": -0.0064,
+      "macro_f1": 0.0111
+    },
+    "experiment": {
+      "id": 8,
+      "train_domain": "laptop",
+      "test_domain": "laptop",
+      "model": "deberta",
+      "type": "in-domain"
+    }
+  }
+]

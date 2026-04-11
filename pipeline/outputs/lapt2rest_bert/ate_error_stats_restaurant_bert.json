@@ -1,0 +1,84 @@
+[
+  {
+    "error_type": "Correct",
+    "count": 179,
+    "percentage": 15.63,
+    "examples": [
+      {
+        "sentence": "I have to say they have one of the fastest delivery times in the city.",
+        "gold": "delivery times",
+        "pred": "delivery times"
+      },
+      {
+        "sentence": "I love the drinks, esp lychee martini, and the food is also VERY good.",
+        "gold": "food",
+        "pred": "food"
+      },
+      {
+        "sentence": "menu - uneventful, small.",
+        "gold": "menu",
+        "pred": "menu"
+      }
+    ]
+  },
+  {
+    "error_type": "Missing",
+    "count": 874,
+    "percentage": 76.33,
+    "examples": [
+      {
+        "sentence": "The bread is top notch as well.",
+        "gold": "bread"
+      },
+      {
+        "sentence": "Food is always fresh and hot- ready to eat!",
+        "gold": "Food"
+      },
+      {
+        "sentence": "Did I mention that the coffee is OUTSTANDING?",
+        "gold": "coffee"
+      }
+    ]
+  },
+  {
+    "error_type": "Spurious",
+    "count": 25,
+    "percentage": 2.18,
+    "examples": [
+      {
+        "sentence": "Had a great experience at Trio ... staff was pleasant; food was tasty and large in portion size - I would highly recommend the portobello/gorgonzola/sausage appetizer and the lobster risotto.",
+        "pred": "..."
+      },
+      {
+        "sentence": "The atmosphere is attractive, but a little uncomfortable.",
+        "pred": "atmosphere"
+      },
+      {
+        "sentence": "The sauce may not be for everyone, since it is distintive.",
+        "pred": "sauce"
+      }
+    ]
+  },
+  {
+    "error_type": "Boundary",
+    "count": 67,
+    "percentage": 5.85,
+    "examples": [
+      {
+        "sentence": "Try the rose roll (not on menu).",
+        "gold": "rose roll",
+        "pred": "roll"
+      },
+      {
+        "sentence": "While there's a decent menu, it shouldn't take ten minutes to get your drinks and 45 for a dessert pizza.",
+        "gold": "menu",
+        "pred": "menu,"
+      },
+      {
+        "sentence": "Anytime and everytime I find myself in the neighborhood I will go to Sushi Rose for fresh sushi and great portions all at a reasonable price.",
+        "gold": "price",
+        "pred": "price."
+      }
+    ]
+  }
+]

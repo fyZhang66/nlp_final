@@ -1,0 +1,84 @@
+[
+  {
+    "error_type": "Correct",
+    "count": 135,
+    "percentage": 17.13,
+    "examples": [
+      {
+        "sentence": "Sure it's not light and slim but the features make up for it 100%.",
+        "gold": "features",
+        "pred": "features"
+      },
+      {
+        "sentence": "I am pleased with the fast log on, speedy WiFi connection and the long battery life (>6 hrs).",
+        "gold": "battery life",
+        "pred": "battery life"
+      },
+      {
+        "sentence": "Luckily, for all of us contemplating the decision, the Mac Mini is priced just right.",
+        "gold": "priced",
+        "pred": "priced"
+      }
+    ]
+  },
+  {
+    "error_type": "Missing",
+    "count": 374,
+    "percentage": 47.46,
+    "examples": [
+      {
+        "sentence": "Boot time is super fast, around anywhere from 35 seconds to 1 minute.",
+        "gold": "Boot time"
+      },
+      {
+        "sentence": "tech support would not fix the problem unless I bought your plan for $150 plus.",
+        "gold": "tech support"
+      },
+      {
+        "sentence": "Set up was easy.",
+        "gold": "Set up"
+      }
+    ]
+  },
+  {
+    "error_type": "Spurious",
+    "count": 150,
+    "percentage": 19.04,
+    "examples": [
+      {
+        "sentence": "Luckily, for all of us contemplating the decision, the Mac Mini is priced just right.",
+        "pred": "Mac Mini"
+      },
+      {
+        "sentence": "I had gotten this model for  $1199.00 on my State's tax-free weekend and had a $100 off coupon for a MacBook at the local BestBuy!",
+        "pred": "coupon"
+      },
+      {
+        "sentence": "I enjoy having apple products.",
+        "pred": "apple products."
+      }
+    ]
+  },
+  {
+    "error_type": "Boundary",
+    "count": 129,
+    "percentage": 16.37,
+    "examples": [
+      {
+        "sentence": "Did not enjoy the new Windows 8 and touchscreen functions.",
+        "gold": "Windows 8",
+        "pred": "8"
+      },
+      {
+        "sentence": "Did not enjoy the new Windows 8 and touchscreen functions.",
+        "gold": "touchscreen functions",
+        "pred": "touchscreen functions."
+      },
+      {
+        "sentence": "Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag.",
+        "gold": "click pads",
+        "pred": "pads"
+      }
+    ]
+  }
+]

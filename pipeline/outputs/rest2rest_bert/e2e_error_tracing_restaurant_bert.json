@@ -1,0 +1,162 @@
+[
+  {
+    "category": "ATE Miss → Sentiment Lost",
+    "count": 74,
+    "percentage": 21.39,
+    "examples": [
+      {
+        "sentence_id": "32894246#870052#1",
+        "sentence": "I trust the people at Go Sushi, it never disappoints.",
+        "gold": {
+          "term": "people",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Miss → Sentiment Lost"
+      },
+      {
+        "sentence_id": "35390182#756337#5",
+        "sentence": "Try the rose roll (not on menu).",
+        "gold": {
+          "term": "menu",
+          "sentiment": "neutral"
+        },
+        "error_type": "ATE Miss → Sentiment Lost"
+      },
+      {
+        "sentence_id": "35397104#0#3",
+        "sentence": "Sandwiches, burgers and salads, like the lemon-dressed cobb, are classic successes.",
+        "gold": {
+          "term": "lemon-dressed cobb",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Miss → Sentiment Lost"
+      }
+    ]
+  },
+  {
+    "category": "ATE Boundary Error → Sentiment Wrong",
+    "count": 81,
+    "percentage": 23.41,
+    "examples": [
+      {
+        "sentence_id": "11359717#1138929#3",
+        "sentence": "The sangria's - watered down.",
+        "gold": {
+          "term": "sangria",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "sangria's",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Boundary Error → Sentiment Wrong"
+      },
+      {
+        "sentence_id": "35390148#588852#2",
+        "sentence": "The portions of the food that came out were mediocre.",
+        "gold": {
+          "term": "portions of the food",
+          "sentiment": "neutral"
+        },
+        "predicted": {
+          "term": "portions",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Boundary Error → Sentiment Wrong"
+      },
+      {
+        "sentence_id": "35714274#1076679#0",
+        "sentence": "How pretentious and inappropriate for MJ Grill to claim that it provides power lunch and dinners!",
+        "gold": {
+          "term": "dinners",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "dinners!",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Boundary Error → Sentiment Wrong"
+      }
+    ]
+  },
+  {
+    "category": "ATE Correct → ASC Wrong",
+    "count": 96,
+    "percentage": 27.75,
+    "examples": [
+      {
+        "sentence_id": "11351513#832512#1",
+        "sentence": "the two waitress's looked like they had been sucking on lemons.",
+        "gold": {
+          "term": "waitress's",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "waitress's",
+          "sentiment": "neutral"
+        },
+        "error_type": "ATE Correct → ASC Wrong"
+      },
+      {
+        "sentence_id": "35714274#1076679#0",
+        "sentence": "How pretentious and inappropriate for MJ Grill to claim that it provides power lunch and dinners!",
+        "gold": {
+          "term": "lunch",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "lunch",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Correct → ASC Wrong"
+      },
+      {
+        "sentence_id": "35720486#684689#4",
+        "sentence": "The staff should be a bit more friendly.",
+        "gold": {
+          "term": "staff",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "staff",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Correct → ASC Wrong"
+      }
+    ]
+  },
+  {
+    "category": "ATE Spurious → False Positive",
+    "count": 95,
+    "percentage": 27.46,
+    "examples": [
+      {
+        "sentence_id": "32894246#870052#0",
+        "sentence": "Certainly not the best sushi in New York, however, it is always fresh, and the place is very clean, sterile.",
+        "predicted": {
+          "term": "sushi",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Spurious → False Positive"
+      },
+      {
+        "sentence_id": "35390148#588852#2",
+        "sentence": "The portions of the food that came out were mediocre.",
+        "predicted": {
+          "term": "food",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Spurious → False Positive"
+      },
+      {
+        "sentence_id": "32894336#662479#0",
+        "sentence": "Harumi Sushi has the freshest and most delicious array of sushi in NYC.",
+        "predicted": {
+          "term": "Sushi",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Spurious → False Positive"
+      }
+    ]
+  }
+]

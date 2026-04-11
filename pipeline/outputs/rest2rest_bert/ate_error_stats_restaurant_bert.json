@@ -1,0 +1,84 @@
+[
+  {
+    "error_type": "Correct",
+    "count": 633,
+    "percentage": 52.1,
+    "examples": [
+      {
+        "sentence": "The bread is top notch as well.",
+        "gold": "bread",
+        "pred": "bread"
+      },
+      {
+        "sentence": "Food is always fresh and hot- ready to eat!",
+        "gold": "Food",
+        "pred": "Food"
+      },
+      {
+        "sentence": "Did I mention that the coffee is OUTSTANDING?",
+        "gold": "coffee",
+        "pred": "coffee"
+      }
+    ]
+  },
+  {
+    "error_type": "Missing",
+    "count": 74,
+    "percentage": 6.09,
+    "examples": [
+      {
+        "sentence": "I trust the people at Go Sushi, it never disappoints.",
+        "gold": "people"
+      },
+      {
+        "sentence": "Try the rose roll (not on menu).",
+        "gold": "menu"
+      },
+      {
+        "sentence": "Sandwiches, burgers and salads, like the lemon-dressed cobb, are classic successes.",
+        "gold": "lemon-dressed cobb"
+      }
+    ]
+  },
+  {
+    "error_type": "Spurious",
+    "count": 95,
+    "percentage": 7.82,
+    "examples": [
+      {
+        "sentence": "Certainly not the best sushi in New York, however, it is always fresh, and the place is very clean, sterile.",
+        "pred": "sushi"
+      },
+      {
+        "sentence": "The portions of the food that came out were mediocre.",
+        "pred": "food"
+      },
+      {
+        "sentence": "Harumi Sushi has the freshest and most delicious array of sushi in NYC.",
+        "pred": "Sushi"
+      }
+    ]
+  },
+  {
+    "error_type": "Boundary",
+    "count": 413,
+    "percentage": 33.99,
+    "examples": [
+      {
+        "sentence": "I have to say they have one of the fastest delivery times in the city.",
+        "gold": "delivery times",
+        "pred": "delivery"
+      },
+      {
+        "sentence": "Straight-forward, no surprises, very decent Japanese food.",
+        "gold": "Japanese food",
+        "pred": "Japanese food."
+      },
+      {
+        "sentence": "BEST spicy tuna roll, great asian salad.",
+        "gold": "spicy tuna roll",
+        "pred": "spicy tuna roll,"
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "task": "asc",
+  "domain": "restaurant",
+  "model": "bert",
+  "split": "test",
+  "metrics": {
+    "accuracy": 0.8303571428571429,
+    "macro_f1": 0.7439439291626649
+  },
+  "extras": {
+    "classification_report": "              precision    recall  f1-score   support\n\n    positive       0.89      0.93      0.91       728\n    negative       0.73      0.79      0.76       196\n     neutral       0.65      0.49      0.56       196\n\n    accuracy                           0.83      1120\n   macro avg       0.76      0.74      0.74      1120\nweighted avg       0.82      0.83      0.82      1120\n"
+  }
+}

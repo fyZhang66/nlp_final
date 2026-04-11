@@ -1,10 +1,19 @@
 {
-  "eval_loss": 0.11937829852104187,
-  "eval_f1": 0.7688855646970829,
-  "eval_precision": 0.749271137026239,
-  "eval_recall": 0.7895545314900153,
-  "eval_runtime": 7.7641,
-  "eval_samples_per_second": 103.039,
-  "eval_steps_per_second": 3.22,
-  "epoch": 5.0
+  "schema_version": 1,
+  "task": "ate",
+  "domain": "laptop",
+  "model": "bert",
+  "split": "test",
+  "metrics": {
+    "loss": 0.12017092108726501,
+    "f1": 0.7761413843888071,
+    "precision": 0.7454031117397454,
+    "recall": 0.8095238095238095
+  },
+  "extras": {
+    "epoch": 5.0,
+    "eval_runtime": 0.8213,
+    "eval_samples_per_second": 974.028,
+    "eval_steps_per_second": 30.438
+  }
 }

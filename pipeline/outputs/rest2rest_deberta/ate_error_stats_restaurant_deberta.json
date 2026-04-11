@@ -1,0 +1,84 @@
+[
+  {
+    "error_type": "Correct",
+    "count": 652,
+    "percentage": 54.2,
+    "examples": [
+      {
+        "sentence": "The bread is top notch as well.",
+        "gold": "bread",
+        "pred": "bread"
+      },
+      {
+        "sentence": "I have to say they have one of the fastest delivery times in the city.",
+        "gold": "delivery times",
+        "pred": "delivery times"
+      },
+      {
+        "sentence": "Food is always fresh and hot- ready to eat!",
+        "gold": "Food",
+        "pred": "Food"
+      }
+    ]
+  },
+  {
+    "error_type": "Missing",
+    "count": 56,
+    "percentage": 4.66,
+    "examples": [
+      {
+        "sentence": "I trust the people at Go Sushi, it never disappoints.",
+        "gold": "people"
+      },
+      {
+        "sentence": "The food is great (big selection, reasonable prices) and the drinks are really good.",
+        "gold": "selection"
+      },
+      {
+        "sentence": "The food was very good and I was pleasantly surprised to see so many vegan options.",
+        "gold": "vegan options"
+      }
+    ]
+  },
+  {
+    "error_type": "Spurious",
+    "count": 83,
+    "percentage": 6.9,
+    "examples": [
+      {
+        "sentence": "Certainly not the best sushi in New York, however, it is always fresh, and the place is very clean, sterile.",
+        "pred": "sushi"
+      },
+      {
+        "sentence": "The portions of the food that came out were mediocre.",
+        "pred": "food"
+      },
+      {
+        "sentence": "A nice space, as long as it doesn't get too crowded and a singleminded devotion to its chosen cuisine make Mare a great choice for seafood lovers.",
+        "pred": "space,"
+      }
+    ]
+  },
+  {
+    "error_type": "Boundary",
+    "count": 412,
+    "percentage": 34.25,
+    "examples": [
+      {
+        "sentence": "Straight-forward, no surprises, very decent Japanese food.",
+        "gold": "Japanese food",
+        "pred": "Japanese food."
+      },
+      {
+        "sentence": "BEST spicy tuna roll, great asian salad.",
+        "gold": "spicy tuna roll",
+        "pred": "spicy tuna roll,"
+      },
+      {
+        "sentence": "BEST spicy tuna roll, great asian salad.",
+        "gold": "asian salad",
+        "pred": "asian salad."
+      }
+    ]
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "category": "ATE Miss → Sentiment Lost",
+    "count": 51,
+    "percentage": 22.77,
+    "examples": [
+      {
+        "sentence_id": "663:1",
+        "sentence": "Super light, super sexy and everything just works.",
+        "gold": {
+          "term": "works",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Miss → Sentiment Lost"
+      },
+      {
+        "sentence_id": "787:444",
+        "sentence": "The criticism has waned, and now I'd be the first to recommend an Air for truly portable computing.",
+        "gold": {
+          "term": "portable computing",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Miss → Sentiment Lost"
+      },
+      {
+        "sentence_id": "294:1",
+        "sentence": "They don't just look good; they deliver excellent performance.",
+        "gold": {
+          "term": "look",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Miss → Sentiment Lost"
+      }
+    ]
+  },
+  {
+    "category": "ATE Boundary Error → Sentiment Wrong",
+    "count": 46,
+    "percentage": 20.54,
+    "examples": [
+      {
+        "sentence_id": "958:1",
+        "sentence": "Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag.",
+        "gold": {
+          "term": "price tag",
+          "sentiment": "positive"
+        },
+        "predicted": {
+          "term": "price tag.",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Boundary Error → Sentiment Wrong"
+      },
+      {
+        "sentence_id": "282:9",
+        "sentence": "No installation disk (DVD) is included.",
+        "gold": {
+          "term": "installation disk (DVD)",
+          "sentiment": "neutral"
+        },
+        "predicted": {
+          "term": "installation disk",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Boundary Error → Sentiment Wrong"
+      },
+      {
+        "sentence_id": "910:1",
+        "sentence": "This laptop has only 2 USB ports, and they are both on the same side.",
+        "gold": {
+          "term": "USB ports",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "USB ports,",
+          "sentiment": "neutral"
+        },
+        "error_type": "ATE Boundary Error → Sentiment Wrong"
+      }
+    ]
+  },
+  {
+    "category": "ATE Correct → ASC Wrong",
+    "count": 70,
+    "percentage": 31.25,
+    "examples": [
+      {
+        "sentence_id": "562:1",
+        "sentence": "Did not enjoy the new Windows 8 and touchscreen functions.",
+        "gold": {
+          "term": "Windows 8",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "Windows 8",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Correct → ASC Wrong"
+      },
+      {
+        "sentence_id": "792:2",
+        "sentence": "The baterry is very longer.",
+        "gold": {
+          "term": "baterry",
+          "sentiment": "positive"
+        },
+        "predicted": {
+          "term": "baterry",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Correct → ASC Wrong"
+      },
+      {
+        "sentence_id": "1141:1",
+        "sentence": "I would have given it 5 starts was it not for the fact that it had Windows 8",
+        "gold": {
+          "term": "Windows 8",
+          "sentiment": "negative"
+        },
+        "predicted": {
+          "term": "Windows 8",
+          "sentiment": "neutral"
+        },
+        "error_type": "ATE Correct → ASC Wrong"
+      }
+    ]
+  },
+  {
+    "category": "ATE Spurious → False Positive",
+    "count": 57,
+    "percentage": 25.45,
+    "examples": [
+      {
+        "sentence_id": "282:9",
+        "sentence": "No installation disk (DVD) is included.",
+        "predicted": {
+          "term": "(DVD)",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Spurious → False Positive"
+      },
+      {
+        "sentence_id": "314:21",
+        "sentence": "The Apple engineers have not yet discovered the delete key.",
+        "predicted": {
+          "term": "Apple engineers",
+          "sentiment": "negative"
+        },
+        "error_type": "ATE Spurious → False Positive"
+      },
+      {
+        "sentence_id": "655:1",
+        "sentence": "The receiver was full of superlatives for the quality and performance.",
+        "predicted": {
+          "term": "receiver",
+          "sentiment": "positive"
+        },
+        "error_type": "ATE Spurious → False Positive"
+      }
+    ]
+  }
+]

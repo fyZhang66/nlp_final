@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "task": "asc",
+  "domain": "restaurant",
+  "model": "deberta",
+  "split": "test",
+  "metrics": {
+    "accuracy": 0.8419642857142857,
+    "macro_f1": 0.7481237680520962
+  },
+  "extras": {
+    "classification_report": "              precision    recall  f1-score   support\n\n    positive       0.87      0.96      0.91       728\n    negative       0.76      0.84      0.80       196\n     neutral       0.77      0.41      0.53       196\n\n    accuracy                           0.84      1120\n   macro avg       0.80      0.74      0.75      1120\nweighted avg       0.84      0.84      0.83      1120\n"
+  }
+}

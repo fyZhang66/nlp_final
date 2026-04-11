@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "task": "ate",
+  "domain": "laptop",
+  "model": "deberta",
+  "split": "test",
+  "metrics": {
+    "loss": 0.10109066963195801,
+    "f1": 0.817838246409675,
+    "precision": 0.8050595238095238,
+    "recall": 0.8310291858678955
+  },
+  "extras": {
+    "epoch": 5.0,
+    "eval_runtime": 1.3608,
+    "eval_samples_per_second": 587.875,
+    "eval_steps_per_second": 36.742
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "task": "ate",
+  "domain": "restaurant",
+  "model": "bert",
+  "split": "test",
+  "metrics": {
+    "loss": 0.11772958934307098,
+    "f1": 0.8329026701119725,
+    "precision": 0.8119227539882452,
+    "recall": 0.8549955791335102
+  },
+  "extras": {
+    "epoch": 5.0,
+    "eval_runtime": 0.8212,
+    "eval_samples_per_second": 974.147,
+    "eval_steps_per_second": 30.442
+  }
+}

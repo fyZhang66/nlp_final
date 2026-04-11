@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "task": "ate",
+  "domain": "restaurant",
+  "model": "deberta",
+  "split": "test",
+  "metrics": {
+    "loss": 0.11710593849420547,
+    "f1": 0.8616975441619991,
+    "precision": 0.8403361344537815,
+    "recall": 0.8841732979664014
+  },
+  "extras": {
+    "epoch": 5.0,
+    "eval_runtime": 1.4205,
+    "eval_samples_per_second": 563.169,
+    "eval_steps_per_second": 35.198
+  }
+}
