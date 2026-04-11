@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>End-to-End Aspect-Based Sentiment Analysis for Reviews</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .logo {
+            position: absolute;
+            top: 60px;
+            left: 80px;
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            color: #B165FB;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 1px;
+            font-family: 'Sora', sans-serif;
+        }
+        .content {
+            position: absolute;
+            top: 140px;
+            left: 80px;
+            display: flex;
+            width: 1120px;
+        }
+        .purple-bar {
+            width: 8px;
+            height: 200px;
+            background-color: #B165FB;
+            margin-right: 25px;
+            margin-top: 10px;
+        }
+        .title-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .title-small {
+            font-family: 'Sora', sans-serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: #B165FB;
+            margin-bottom: 5px;
+        }
+        .title-large {
+            font-family: 'Sora', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            font-family: 'Manrope', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #9CA3AF;
+            line-height: 1.4;
+            max-width: 700px;
+            margin-bottom: 25px;
+        }
+        .course-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #A0A0A0;
+        }
+        .course-info i {
+            color: #B165FB;
+            margin-right: 8px;
+        }
+        .course-name {
+            font-weight: 600;
+            color: white;
+        }
+        .team-section {
+            position: absolute;
+            bottom: 60px;
+            left: 80px;
+            width: 1120px;
+        }
+        .team-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+        .team-grid {
+            display: flex;
+            gap: 20px;
+        }
+        .team-member {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(177, 101, 251, 0.3);
+            border-radius: 8px;
+            padding: 12px 15px;
+            flex: 1;
+        }
+        .member-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 3px;
+        }
+        .member-email {
+            font-size: 12px;
+            color: #9CA3AF;
+        }
+        .date-info {
+            position: absolute;
+            top: 60px;
+            right: 80px;
+            text-align: right;
+        }
+        .date-text {
+            font-size: 14px;
+            color: #A0A0A0;
+        }
+        .date-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+        .wave-decoration {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 220px;
+            height: 720px;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+        svg path {
+            fill: none;
+            stroke: #B165FB;
+            stroke-width: 1;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="logo">
+<i class="fas fa-robot logo-icon"></i>
+<div class="logo-text">NLP FINAL PROJECT</div>
+</div>
+<div class="date-info">
+<div class="date-text">Presentation Date</div>
+<div class="date-value">April 2026</div>
+</div>
+<div class="content">
+<div class="purple-bar"></div>
+<div class="title-container">
+<div class="title-small">End-to-End Aspect-Based</div>
+<div class="title-large">Sentiment Analysis for Reviews</div>
+<div class="subtitle">ATE + ASC Pipeline with Cross-Domain Evaluation on SemEval 2014</div>
+<div class="course-info">
+<i class="fas fa-university"></i>
+<span>Course: </span>
+<span class="course-name">INFO 7610 Natural Language Processing — Final Presentation</span>
+</div>
+</div>
+</div>
+<div class="team-section">
+<div class="team-title">Team Members</div>
+<div class="team-grid">
+<div class="team-member">
+<div class="member-name">Gousu Ding</div>
+<div class="member-email">ding.go@northeastern.edu</div>
+</div>
+<div class="team-member">
+<div class="member-name">Fangyuan Zhang</div>
+<div class="member-email">zhang.fangyua@northeastern.edu</div>
+</div>
+<div class="team-member">
+<div class="member-name">Yunzhu Chen</div>
+<div class="member-email">chen.yunzh@northeastern.edu</div>
+</div>
+<div class="team-member">
+<div class="member-name">Yubo Wang</div>
+<div class="member-email">wang.yubo3@northeastern.edu</div>
+</div>
+</div>
+</div>
+<div class="wave-decoration">
+<svg viewbox="0 0 400 720" xmlns="http://www.w3.org/2000/svg">
+<path d="M400,100 Q350,150 400,200 T400,300 T400,400 T400,500 T400,600"></path>
+<path d="M420,120 Q370,170 420,220 T420,320 T420,420 T420,520 T420,620"></path>
+<path d="M440,140 Q390,190 440,240 T440,340 T440,440 T440,540 T440,640"></path>
+<path d="M460,160 Q410,210 460,260 T460,360 T460,460 T460,560 T460,660"></path>
+<path d="M480,180 Q430,230 480,280 T480,380 T480,480 T480,580 T480,680"></path>
+<path d="M500,200 Q450,250 500,300 T500,400 T500,500 T500,600 T500,700"></path>
+<path d="M520,220 Q470,270 520,320 T520,420 T520,520 T520,620 T520,720"></path>
+<path d="M540,240 Q490,290 540,340 T540,440 T540,540 T540,640 T540,740"></path>
+<path d="M560,260 Q510,310 560,360 T560,460 T560,560 T560,660 T560,760"></path>
+<path d="M580,280 Q530,330 580,380 T580,480 T580,580 T580,680 T580,780"></path>
+<path d="M600,300 Q550,350 600,400 T600,500 T600,600 T600,700 T600,800"></path>
+<path d="M620,320 Q570,370 620,420 T620,520 T620,620 T620,720 T620,820"></path>
+<path d="M640,340 Q590,390 640,440 T640,540 T640,640 T640,740 T640,840"></path>
+<path d="M660,360 Q610,410 660,460 T660,560 T660,660 T660,760 T660,860"></path>
+<path d="M680,380 Q630,430 680,480 T680,580 T680,680 T680,780 T680,880"></path>
+</svg>
+</div>
+</div>
+</body>
+</html>

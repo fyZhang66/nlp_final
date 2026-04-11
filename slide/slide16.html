@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Future Work</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 30px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 35px; }
+.left-panel { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.future-card {
+    border-radius: 8px; padding: 18px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; gap: 14px; align-items: flex-start;
+}
+.future-icon {
+    width: 38px; height: 38px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+}
+.future-content { flex: 1; }
+.future-title { font-size: 0.95rem; font-weight: 600; color: white; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
+.future-text { font-size: 0.82rem; color: #A0AEC0; line-height: 1.5; }
+.future-text strong { color: #E0E0E0; }
+.impact-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 0.68rem; font-weight: 600; margin-top: 6px;
+}
+.impact-high { background: rgba(74,222,128,0.15); color: #4ADE80; }
+.impact-med { background: rgba(251,191,36,0.15); color: #FBBF24; }
+.impact-explore { background: rgba(96,165,250,0.15); color: #60A5FA; }
+.thank-you {
+    margin-top: auto; padding: 20px; text-align: center;
+    background: linear-gradient(135deg, rgba(177,101,251,0.12), rgba(177,101,251,0.04));
+    border: 1px solid rgba(177,101,251,0.25); border-radius: 10px;
+}
+.ty-text { font-size: 1.3rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; margin-bottom: 6px; }
+.ty-sub { font-size: 0.9rem; color: #A0AEC0; }
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Future Work</div>
+            <div class="subtitle">Directions for Improving End-to-End ABSA</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="future-card">
+                <div class="future-icon" style="background:rgba(74,222,128,0.15); color:#4ADE80;">
+                    <i class="fas fa-link"></i>
+                </div>
+                <div class="future-content">
+                    <div class="future-title">Joint ATE + ASC Modeling</div>
+                    <div class="future-text">Train both tasks simultaneously with shared parameters to reduce error propagation between stages.</div>
+                    <div class="impact-tag impact-high">High Impact</div>
+                </div>
+            </div>
+            <div class="future-card">
+                <div class="future-icon" style="background:rgba(192,132,252,0.15); color:#C084FC;">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </div>
+                <div class="future-content">
+                    <div class="future-title">Larger Pre-trained Models</div>
+                    <div class="future-text">DeBERTa-large, RoBERTa-large for richer representations. Our results show DeBERTa-base already gains +10 pp on cross-domain ATE.</div>
+                    <div class="impact-tag impact-high">High Impact</div>
+                </div>
+            </div>
+            <div class="future-card">
+                <div class="future-icon" style="background:rgba(251,191,36,0.15); color:#FBBF24;">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="future-content">
+                    <div class="future-title">Data Augmentation</div>
+                    <div class="future-text">Generate synthetic cross-domain training data to bridge the domain gap. Back-translation and paraphrase generation.</div>
+                    <div class="impact-tag impact-med">Medium Impact</div>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="future-card">
+                <div class="future-icon" style="background:rgba(96,165,250,0.15); color:#60A5FA;">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <div class="future-content">
+                    <div class="future-title">Few-Shot Domain Adaptation</div>
+                    <div class="future-text">Adapt to new domains with minimal labeled data. Meta-learning or prompt-tuning approaches for rapid domain transfer.</div>
+                    <div class="impact-tag impact-med">Medium Impact</div>
+                </div>
+            </div>
+            <div class="future-card">
+                <div class="future-icon" style="background:rgba(239,68,68,0.15); color:#EF4444;">
+                    <i class="fas fa-eye-slash"></i>
+                </div>
+                <div class="future-content">
+                    <div class="future-title">Implicit Aspect Detection</div>
+                    <div class="future-text">Handle aspects not explicitly mentioned: "The restaurant was not bad" implies food/service. Requires reasoning beyond token spans.</div>
+                    <div class="impact-tag impact-explore">Exploratory</div>
+                </div>
+            </div>
+            <div class="future-card">
+                <div class="future-icon" style="background:rgba(177,101,251,0.15); color:#B165FB;">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="future-content">
+                    <div class="future-title">LLM-Based ABSA</div>
+                    <div class="future-text">Compare with GPT-4 / Claude zero-shot and few-shot performance. Can LLMs replace the two-stage pipeline entirely?</div>
+                    <div class="impact-tag impact-explore">Exploratory</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thank-you">
+        <div class="ty-text">Thank You! Questions?</div>
+        <div class="ty-sub">Code and results available in the project repository</div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

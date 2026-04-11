@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Architecture - ASC</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 25px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 35px; }
+.left-panel { flex: 1.1; display: flex; flex-direction: column; gap: 14px; }
+.right-panel { flex: 0.9; display: flex; flex-direction: column; gap: 14px; }
+.arch-box {
+    background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px;
+}
+.arch-title { font-size: 1rem; font-weight: 600; color: #B165FB; margin-bottom: 10px; font-family: 'Sora', sans-serif; }
+.arch-desc { font-size: 0.88rem; color: #A0AEC0; line-height: 1.6; }
+.arch-desc strong { color: #E0E0E0; }
+.encoding-diagram {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; padding: 14px; background: rgba(177,101,251,0.06);
+    border-radius: 8px; border: 1px solid rgba(177,101,251,0.15);
+}
+.enc-block {
+    padding: 10px 14px; text-align: center;
+    font-size: 0.82rem; color: #E0E0E0; font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.enc-block.special { background: #B165FB; color: white; font-weight: 700; font-size: 0.78rem; }
+.enc-block.sentence { background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.3); }
+.enc-block.aspect { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.3); }
+.hp-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.hp-table th {
+    text-align: left; font-size: 0.78rem; color: #B165FB; padding: 6px 10px;
+    border-bottom: 1px solid rgba(177,101,251,0.3); font-weight: 600;
+}
+.hp-table td {
+    font-size: 0.82rem; color: #E0E0E0; padding: 6px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.hp-table tr:last-child td { border-bottom: none; }
+.example-box {
+    background-color: rgba(177,101,251,0.1); border-left: 3px solid #B165FB;
+    padding: 12px 15px; border-radius: 4px;
+}
+.example-text {
+    font-size: 0.82rem; color: #E0E0E0;
+    font-family: 'Monaco','Menlo',monospace; line-height: 1.6;
+}
+.class-labels { display: flex; gap: 12px; margin-top: 10px; }
+.class-pill {
+    padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+}
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Model Architecture</div>
+            <div class="subtitle">Stage 2: Aspect Sentiment Classification (ASC) — Sequence Classification</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="arch-box">
+                <div class="arch-title"><i class="fas fa-project-diagram" style="margin-right:8px;"></i>Architecture</div>
+                <div class="arch-desc">
+                    <strong>Input:</strong> Sentence-aspect pair encoding<br/>
+                    <strong>Backbone:</strong> BERT-base-uncased or DeBERTa-base<br/>
+                    <strong>Head:</strong> Linear 3-class classifier on [CLS] representation<br/>
+                    <strong>Evaluation:</strong> Accuracy + Macro-F1 (balanced across classes)
+                </div>
+                <div class="class-labels">
+                    <div class="class-pill" style="background:rgba(74,222,128,0.2); color:#4ADE80;">Positive</div>
+                    <div class="class-pill" style="background:rgba(239,68,68,0.2); color:#EF4444;">Negative</div>
+                    <div class="class-pill" style="background:rgba(251,191,36,0.2); color:#FBBF24;">Neutral</div>
+                </div>
+            </div>
+            <div style="font-size:0.82rem; color:#A0AEC0; margin-bottom:4px; font-weight:600;">Input Encoding Format</div>
+            <div class="encoding-diagram">
+                <div class="enc-block special">[CLS]</div>
+                <div class="enc-block sentence" style="flex:1;">review sentence tokens</div>
+                <div class="enc-block special">[SEP]</div>
+                <div class="enc-block aspect">aspect term</div>
+                <div class="enc-block special">[SEP]</div>
+            </div>
+            <div class="example-box" style="margin-top:14px;">
+                <div style="font-size:0.78rem; color:#B165FB; font-weight:600; margin-bottom:6px;">Example</div>
+                <div class="example-text">
+                    Input: ("The clam chowder was incredible but the waiter was rude.", <span style="color:#FBBF24;">"clam chowder"</span>)<br/>
+                    Output: <span style="color:#4ADE80; font-weight:700;">Positive</span>
+                </div>
+                <div class="example-text" style="margin-top:6px;">
+                    Input: ("The clam chowder was incredible but the waiter was rude.", <span style="color:#FBBF24;">"waiter"</span>)<br/>
+                    Output: <span style="color:#EF4444; font-weight:700;">Negative</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="arch-box" style="flex:1;">
+                <div class="arch-title"><i class="fas fa-sliders-h" style="margin-right:8px;"></i>Hyperparameters</div>
+                <table class="hp-table">
+                    <tr><th>Parameter</th><th>BERT</th><th>DeBERTa</th></tr>
+                    <tr><td>Pre-trained Model</td><td>bert-base-uncased</td><td>microsoft/deberta-base</td></tr>
+                    <tr><td>Learning Rate</td><td>3e-5</td><td>2e-5</td></tr>
+                    <tr><td>Epochs</td><td>5</td><td>3</td></tr>
+                    <tr><td>Batch Size (train)</td><td>16</td><td>16</td></tr>
+                    <tr><td>Batch Size (eval)</td><td>32</td><td>32</td></tr>
+                    <tr><td>Max Seq Length</td><td>128</td><td>128</td></tr>
+                    <tr><td>Weight Decay</td><td>0.01</td><td>0.01</td></tr>
+                    <tr><td>Warmup Steps</td><td>100</td><td>100</td></tr>
+                    <tr><td>Metric for Best</td><td colspan="2">eval_macro_f1</td></tr>
+                </table>
+            </div>
+            <div style="padding:12px; background:rgba(177,101,251,0.08); border-left:3px solid #B165FB; border-radius:4px;">
+                <span style="font-size:0.82rem; color:#E0E0E0;">
+                    <i class="fas fa-info-circle" style="color:#B165FB; margin-right:6px;"></i>
+                    Uses HuggingFace <strong>AutoModelForSequenceClassification</strong>. Sentence-pair tokenization: <code style="color:#B165FB;">tokenizer(sentence, aspect)</code>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

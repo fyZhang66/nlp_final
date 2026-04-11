@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cross-Domain Experiment Matrix</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 25px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 40px; }
+.left-panel { flex: 1.3; display: flex; flex-direction: column; }
+.right-panel { flex: 0.7; display: flex; flex-direction: column; gap: 14px; }
+.matrix-table { width: 100%; border-collapse: collapse; }
+.matrix-table th {
+    text-align: left; font-size: 0.82rem; color: #B165FB; padding: 10px 12px;
+    border-bottom: 2px solid rgba(177,101,251,0.4); font-weight: 700;
+    font-family: 'Sora', sans-serif;
+}
+.matrix-table td {
+    font-size: 0.88rem; color: #E0E0E0; padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.matrix-table tr.in-domain td { background: rgba(74,222,128,0.04); }
+.matrix-table tr.cross-domain td { background: rgba(251,191,36,0.04); }
+.type-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.72rem; font-weight: 600;
+}
+.type-in { background: rgba(74,222,128,0.15); color: #4ADE80; }
+.type-cross { background: rgba(251,191,36,0.15); color: #FBBF24; }
+.model-tag {
+    display: inline-block; padding: 3px 8px; border-radius: 4px;
+    font-size: 0.72rem; font-weight: 600;
+}
+.model-bert { background: rgba(59,130,246,0.2); color: #60A5FA; }
+.model-deberta { background: rgba(168,85,247,0.2); color: #C084FC; }
+.id-num { color: #B165FB; font-weight: 700; font-family: 'Sora', sans-serif; }
+.visual-matrix {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px;
+}
+.vm-title { font-size: 0.9rem; font-weight: 600; color: #B165FB; margin-bottom: 14px; font-family: 'Sora', sans-serif; }
+.vm-grid { display: grid; grid-template-columns: 90px 1fr 1fr; grid-template-rows: auto auto auto; gap: 6px; }
+.vm-header { font-size: 0.75rem; color: #9CA3AF; text-align: center; padding: 6px; font-weight: 600; }
+.vm-row-label { font-size: 0.78rem; color: #A0AEC0; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 500; }
+.vm-cell {
+    padding: 10px; border-radius: 6px; text-align: center;
+    font-size: 0.78rem; font-weight: 500;
+}
+.vm-in { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.25); color: #4ADE80; }
+.vm-cross { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.25); color: #FBBF24; }
+.question-box {
+    padding: 14px; background: rgba(177,101,251,0.08); border-left: 3px solid #B165FB;
+    border-radius: 4px;
+}
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Cross-Domain Experiments</div>
+            <div class="subtitle">8-Run Evaluation Matrix: 2 Domains x 2 Test Sets x 2 Backbones</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <table class="matrix-table">
+                <tr><th>ID</th><th>Train</th><th>Test</th><th>Model</th><th>Type</th></tr>
+                <tr class="in-domain">
+                    <td><span class="id-num">1</span></td><td>Restaurant</td><td>Restaurant</td>
+                    <td><span class="model-tag model-bert">BERT</span></td>
+                    <td><span class="type-tag type-in">In-domain</span></td>
+                </tr>
+                <tr class="in-domain">
+                    <td><span class="id-num">2</span></td><td>Restaurant</td><td>Restaurant</td>
+                    <td><span class="model-tag model-deberta">DeBERTa</span></td>
+                    <td><span class="type-tag type-in">In-domain</span></td>
+                </tr>
+                <tr class="cross-domain">
+                    <td><span class="id-num">3</span></td><td>Restaurant</td><td>Laptop</td>
+                    <td><span class="model-tag model-bert">BERT</span></td>
+                    <td><span class="type-tag type-cross">Cross-domain</span></td>
+                </tr>
+                <tr class="cross-domain">
+                    <td><span class="id-num">4</span></td><td>Restaurant</td><td>Laptop</td>
+                    <td><span class="model-tag model-deberta">DeBERTa</span></td>
+                    <td><span class="type-tag type-cross">Cross-domain</span></td>
+                </tr>
+                <tr class="cross-domain">
+                    <td><span class="id-num">5</span></td><td>Laptop</td><td>Restaurant</td>
+                    <td><span class="model-tag model-bert">BERT</span></td>
+                    <td><span class="type-tag type-cross">Cross-domain</span></td>
+                </tr>
+                <tr class="cross-domain">
+                    <td><span class="id-num">6</span></td><td>Laptop</td><td>Restaurant</td>
+                    <td><span class="model-tag model-deberta">DeBERTa</span></td>
+                    <td><span class="type-tag type-cross">Cross-domain</span></td>
+                </tr>
+                <tr class="in-domain">
+                    <td><span class="id-num">7</span></td><td>Laptop</td><td>Laptop</td>
+                    <td><span class="model-tag model-bert">BERT</span></td>
+                    <td><span class="type-tag type-in">In-domain</span></td>
+                </tr>
+                <tr class="in-domain">
+                    <td><span class="id-num">8</span></td><td>Laptop</td><td>Laptop</td>
+                    <td><span class="model-tag model-deberta">DeBERTa</span></td>
+                    <td><span class="type-tag type-in">In-domain</span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="right-panel">
+            <div class="visual-matrix">
+                <div class="vm-title"><i class="fas fa-th" style="margin-right:8px;"></i>Domain Transfer Matrix</div>
+                <div class="vm-grid">
+                    <div></div>
+                    <div class="vm-header">Test: Restaurant</div>
+                    <div class="vm-header">Test: Laptop</div>
+                    <div class="vm-row-label">Train: Rest.</div>
+                    <div class="vm-cell vm-in">In-domain<br/><span style="font-size:0.7rem;">#1, #2</span></div>
+                    <div class="vm-cell vm-cross">Cross<br/><span style="font-size:0.7rem;">#3, #4</span></div>
+                    <div class="vm-row-label">Train: Lapt.</div>
+                    <div class="vm-cell vm-cross">Cross<br/><span style="font-size:0.7rem;">#5, #6</span></div>
+                    <div class="vm-cell vm-in">In-domain<br/><span style="font-size:0.7rem;">#7, #8</span></div>
+                </div>
+            </div>
+            <div class="question-box">
+                <div style="font-size:0.85rem; color:#E0E0E0; line-height:1.5;">
+                    <i class="fas fa-question-circle" style="color:#B165FB; margin-right:6px;"></i>
+                    <strong>Research Question:</strong><br/>
+                    How well do ABSA models generalize across product domains? Where does the pipeline break down?
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

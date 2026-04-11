@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>In-Domain ASC Results</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 25px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 35px; }
+.left-panel { flex: 1.2; display: flex; flex-direction: column; }
+.right-panel { flex: 0.8; display: flex; flex-direction: column; gap: 14px; }
+.results-table { width: 100%; border-collapse: collapse; }
+.results-table th {
+    text-align: left; font-size: 0.82rem; color: #B165FB; padding: 10px 12px;
+    border-bottom: 2px solid rgba(177,101,251,0.4); font-weight: 700;
+    font-family: 'Sora', sans-serif;
+}
+.results-table td {
+    font-size: 0.88rem; color: #E0E0E0; padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.model-tag {
+    display: inline-block; padding: 3px 8px; border-radius: 4px;
+    font-size: 0.75rem; font-weight: 600;
+}
+.model-bert { background: rgba(59,130,246,0.2); color: #60A5FA; }
+.model-deberta { background: rgba(168,85,247,0.2); color: #C084FC; }
+.best { color: #4ADE80; font-weight: 700; }
+.class-breakdown {
+    background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 16px;
+}
+.class-title { font-size: 0.9rem; font-weight: 600; color: #B165FB; margin-bottom: 12px; font-family: 'Sora', sans-serif; }
+.class-bar-row { display: flex; align-items: center; margin-bottom: 10px; gap: 8px; }
+.class-label { width: 65px; font-size: 0.8rem; color: #A0AEC0; text-align: right; }
+.class-bar-track { flex: 1; height: 20px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+.class-bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 0.72rem; font-weight: 600; color: white; }
+.class-f1 { width: 45px; font-size: 0.82rem; color: #E0E0E0; text-align: right; font-weight: 600; }
+.insight-box {
+    padding: 14px; background: rgba(177,101,251,0.08); border-left: 3px solid #B165FB;
+    border-radius: 4px;
+}
+.insight-text { font-size: 0.82rem; color: #E0E0E0; line-height: 1.5; }
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">In-Domain ASC Results</div>
+            <div class="subtitle">Standalone Aspect Sentiment Classification — Gold Aspect Terms</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <table class="results-table">
+                <tr>
+                    <th>Domain</th><th>Model</th><th>Accuracy</th><th>Macro-F1</th><th>Pos F1</th><th>Neg F1</th><th>Neu F1</th>
+                </tr>
+                <tr>
+                    <td>Restaurant</td>
+                    <td><span class="model-tag model-bert">BERT</span></td>
+                    <td>83.0%</td><td>74.4%</td>
+                    <td>0.91</td><td>0.76</td><td>0.56</td>
+                </tr>
+                <tr>
+                    <td>Restaurant</td>
+                    <td><span class="model-tag model-deberta">DeBERTa</span></td>
+                    <td class="best">84.2%</td><td class="best">74.8%</td>
+                    <td>0.91</td><td class="best">0.80</td><td>0.53</td>
+                </tr>
+                <tr>
+                    <td>Laptop</td>
+                    <td><span class="model-tag model-bert">BERT</span></td>
+                    <td>75.7%</td><td>69.7%</td>
+                    <td>0.88</td><td>0.71</td><td>0.51</td>
+                </tr>
+                <tr>
+                    <td>Laptop</td>
+                    <td><span class="model-tag model-deberta">DeBERTa</span></td>
+                    <td class="best">79.5%</td><td class="best">75.5%</td>
+                    <td>0.89</td><td>0.73</td><td class="best">0.64</td>
+                </tr>
+            </table>
+            <div style="margin-top:20px;">
+                <div class="insight-box">
+                    <div class="insight-text">
+                        <i class="fas fa-lightbulb" style="color:#B165FB; margin-right:6px;"></i>
+                        <strong>Key insight:</strong> Neutral is the hardest class across all settings (F1: 0.51-0.64). Only ~20% of training data is Neutral, making it hard to learn. DeBERTa improves Laptop Neutral by <strong style="color:#4ADE80;">+13 points</strong> (0.51 &rarr; 0.64).
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="class-breakdown">
+                <div class="class-title">Per-Class F1 (Restaurant DeBERTa)</div>
+                <div class="class-bar-row">
+                    <div class="class-label">Positive</div>
+                    <div class="class-bar-track"><div class="class-bar-fill" style="width:91%; background:#4ADE80;">0.91</div></div>
+                </div>
+                <div class="class-bar-row">
+                    <div class="class-label">Negative</div>
+                    <div class="class-bar-track"><div class="class-bar-fill" style="width:80%; background:#EF4444;">0.80</div></div>
+                </div>
+                <div class="class-bar-row">
+                    <div class="class-label">Neutral</div>
+                    <div class="class-bar-track"><div class="class-bar-fill" style="width:53%; background:#FBBF24;">0.53</div></div>
+                </div>
+            </div>
+            <div class="class-breakdown">
+                <div class="class-title">Per-Class F1 (Laptop DeBERTa)</div>
+                <div class="class-bar-row">
+                    <div class="class-label">Positive</div>
+                    <div class="class-bar-track"><div class="class-bar-fill" style="width:89%; background:#4ADE80;">0.89</div></div>
+                </div>
+                <div class="class-bar-row">
+                    <div class="class-label">Negative</div>
+                    <div class="class-bar-track"><div class="class-bar-fill" style="width:73%; background:#EF4444;">0.73</div></div>
+                </div>
+                <div class="class-bar-row">
+                    <div class="class-label">Neutral</div>
+                    <div class="class-bar-track"><div class="class-bar-fill" style="width:64%; background:#FBBF24;">0.64</div></div>
+                </div>
+            </div>
+            <div class="insight-box">
+                <div class="insight-text">
+                    <i class="fas fa-chart-line" style="color:#B165FB; margin-right:6px;"></i>
+                    Positive class benefits from more training data (~46%). Neutral suffers from class imbalance.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ABSA Final Presentation - All Slides</title>
+<style>
+    body {
+        margin: 0; padding: 20px;
+        background: #0f1117;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex; flex-direction: column; align-items: center;
+    }
+    .nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+        background: rgba(15,17,23,0.95); backdrop-filter: blur(10px);
+        padding: 12px 20px; display: flex; align-items: center;
+        justify-content: center; gap: 12px;
+        border-bottom: 1px solid rgba(177,101,251,0.2);
+    }
+    .nav button {
+        background: rgba(177,101,251,0.15); border: 1px solid rgba(177,101,251,0.3);
+        color: white; padding: 8px 16px; border-radius: 6px;
+        cursor: pointer; font-size: 14px; transition: all 0.2s;
+    }
+    .nav button:hover { background: rgba(177,101,251,0.3); }
+    .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav .slide-counter {
+        color: #A0AEC0; font-size: 14px; min-width: 80px; text-align: center;
+    }
+    .nav .slide-counter strong { color: #B165FB; }
+    .slides-wrapper { margin-top: 70px; }
+    .slide-frame {
+        width: 1280px; height: 720px;
+        border: 1px solid rgba(177,101,251,0.15);
+        border-radius: 8px; overflow: hidden;
+        margin-bottom: 0;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+    .slide-frame iframe {
+        width: 100%; height: 100%; border: none;
+    }
+    .hidden { display: none; }
+    .slide-label {
+        color: #9CA3AF; font-size: 13px; margin: 8px 0 30px;
+        text-align: center;
+    }
+    .overview-btn {
+        background: rgba(177,101,251,0.1) !important;
+        font-size: 12px !important; padding: 6px 10px !important;
+    }
+    .thumb-grid {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 16px; margin-top: 70px; padding: 20px;
+        max-width: 1300px;
+    }
+    .thumb {
+        cursor: pointer; border: 2px solid rgba(255,255,255,0.1);
+        border-radius: 6px; overflow: hidden; transition: all 0.2s;
+        background: #181B24;
+    }
+    .thumb:hover { border-color: #B165FB; transform: scale(1.02); }
+    .thumb iframe {
+        width: 320px; height: 180px; border: none;
+        pointer-events: none; transform-origin: 0 0;
+        transform: scale(0.25);
+        width: 1280px; height: 720px;
+    }
+    .thumb-label {
+        padding: 6px 10px; font-size: 12px; color: #A0AEC0;
+        text-align: center; background: rgba(0,0,0,0.3);
+    }
+    .thumb-container { width: 320px; height: 180px; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="nav">
+    <button onclick="prevSlide()" id="prevBtn">&larr; Prev</button>
+    <div class="slide-counter"><strong id="currentNum">1</strong> / <span id="totalNum">16</span></div>
+    <button onclick="nextSlide()" id="nextBtn">Next &rarr;</button>
+    <button class="overview-btn" onclick="toggleOverview()" id="overviewBtn">Grid View</button>
+</div>
+
+<div id="slideView" class="slides-wrapper"></div>
+<div id="gridView" class="thumb-grid hidden"></div>
+
+<script>
+const slides = [
+    { file: 'slide1.html', label: '1. Title Slide' },
+    { file: 'slide2.html', label: '2. Motivation' },
+    { file: 'slide3.html', label: '3. Problem Definition' },
+    { file: 'slide4.html', label: '4. Dataset' },
+    { file: 'slide5.html', label: '5. ATE Architecture' },
+    { file: 'slide6.html', label: '6. ASC Architecture' },
+    { file: 'slide7.html', label: '7. In-Domain ATE Results' },
+    { file: 'slide8.html', label: '8. In-Domain ASC Results' },
+    { file: 'slide9.html', label: '9. Cross-Domain Matrix' },
+    { file: 'slide10.html', label: '10. Pipeline Results' },
+    { file: 'slide11.html', label: '11. Key Finding' },
+    { file: 'slide12.html', label: '12. ATE Error Analysis' },
+    { file: 'slide13.html', label: '13. E2E Error Tracing' },
+    { file: 'slide14.html', label: '14. BERT vs DeBERTa' },
+    { file: 'slide15.html', label: '15. Conclusions' },
+    { file: 'slide16.html', label: '16. Future Work' },
+];
+
+let current = 0;
+let isGrid = false;
+
+function renderSlide() {
+    const sv = document.getElementById('slideView');
+    sv.innerHTML = `
+        <div class="slide-frame">
+            <iframe src="${slides[current].file}"></iframe>
+        </div>
+        <div class="slide-label">${slides[current].label}</div>
+    `;
+    document.getElementById('currentNum').textContent = current + 1;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+}
+
+function renderGrid() {
+    const gv = document.getElementById('gridView');
+    gv.innerHTML = slides.map((s, i) => `
+        <div class="thumb" onclick="goToSlide(${i})">
+            <div class="thumb-container">
+                <iframe src="${s.file}" loading="lazy"></iframe>
+            </div>
+            <div class="thumb-label">${s.label}</div>
+        </div>
+    `).join('');
+}
+
+function prevSlide() { if (current > 0) { current--; renderSlide(); } }
+function nextSlide() { if (current < slides.length - 1) { current++; renderSlide(); } }
+function goToSlide(i) { current = i; isGrid = false; toggleView(); renderSlide(); }
+
+function toggleOverview() { isGrid = !isGrid; toggleView(); }
+function toggleView() {
+    document.getElementById('slideView').classList.toggle('hidden', isGrid);
+    document.getElementById('gridView').classList.toggle('hidden', !isGrid);
+    document.getElementById('overviewBtn').textContent = isGrid ? 'Slide View' : 'Grid View';
+    if (isGrid) renderGrid();
+}
+
+document.addEventListener('keydown', e => {
+    if (isGrid) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'g') toggleOverview();
+});
+
+renderSlide();
+document.getElementById('totalNum').textContent = slides.length;
+</script>
+</body>
+</html>

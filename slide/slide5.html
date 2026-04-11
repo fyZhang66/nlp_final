@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Architecture - ATE</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 25px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 35px; }
+.left-panel { flex: 1.1; display: flex; flex-direction: column; gap: 14px; }
+.right-panel { flex: 0.9; display: flex; flex-direction: column; gap: 14px; }
+.arch-box {
+    background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px;
+}
+.arch-title { font-size: 1rem; font-weight: 600; color: #B165FB; margin-bottom: 10px; font-family: 'Sora', sans-serif; }
+.arch-desc { font-size: 0.88rem; color: #A0AEC0; line-height: 1.6; }
+.arch-desc strong { color: #E0E0E0; }
+.flow-diagram {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; padding: 14px; background: rgba(177,101,251,0.06);
+    border-radius: 8px; border: 1px solid rgba(177,101,251,0.15);
+}
+.flow-block {
+    background: rgba(177,101,251,0.15); border: 1px solid rgba(177,101,251,0.3);
+    border-radius: 6px; padding: 8px 12px; text-align: center;
+    font-size: 0.78rem; color: #E0E0E0; font-weight: 500;
+}
+.flow-block.active { background: #B165FB; color: white; font-weight: 600; }
+.flow-arrow { color: #B165FB; font-size: 0.9rem; }
+.hp-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.hp-table th {
+    text-align: left; font-size: 0.78rem; color: #B165FB; padding: 6px 10px;
+    border-bottom: 1px solid rgba(177,101,251,0.3); font-weight: 600;
+}
+.hp-table td {
+    font-size: 0.82rem; color: #E0E0E0; padding: 6px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.hp-table tr:last-child td { border-bottom: none; }
+.example-box {
+    background-color: rgba(177,101,251,0.1); border-left: 3px solid #B165FB;
+    padding: 12px 15px; border-radius: 4px;
+}
+.example-text {
+    font-size: 0.82rem; color: #E0E0E0;
+    font-family: 'Monaco','Menlo',monospace; line-height: 1.6;
+}
+.bio-tag { color: #B165FB; font-weight: 700; }
+.o-tag { color: #6B7280; }
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Model Architecture</div>
+            <div class="subtitle">Stage 1: Aspect Term Extraction (ATE) — Token Classification</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="arch-box">
+                <div class="arch-title"><i class="fas fa-project-diagram" style="margin-right:8px;"></i>Architecture</div>
+                <div class="arch-desc">
+                    <strong>Backbone:</strong> BERT-base-uncased or DeBERTa-base<br/>
+                    <strong>Head:</strong> Linear layer over each token &rarr; {B-ASP, I-ASP, O}<br/>
+                    <strong>Subword alignment:</strong> first subword inherits word label; continuations get label -100 (ignored in loss)<br/>
+                    <strong>Evaluation:</strong> entity-level F1 via seqeval (exact span match)
+                </div>
+            </div>
+            <div class="flow-diagram">
+                <div class="flow-block">Input Tokens</div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-block active">BERT / DeBERTa</div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-block">Token Embeddings</div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-block active">Linear Head</div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-block">BIO Labels</div>
+            </div>
+            <div class="example-box">
+                <div style="font-size:0.78rem; color:#B165FB; font-weight:600; margin-bottom:6px;">Example BIO Tagging</div>
+                <div class="example-text">
+                    <span class="o-tag">The</span> <span class="bio-tag">[B-ASP]</span>clam <span class="bio-tag">[I-ASP]</span>chowder <span class="o-tag">was incredible but the</span> <span class="bio-tag">[B-ASP]</span>waiter <span class="o-tag">was rude .</span>
+                </div>
+                <div style="margin-top:8px; font-size:0.78rem; color:#9CA3AF;">
+                    Extracted: <span style="color:#4ADE80;">"clam chowder"</span>, <span style="color:#4ADE80;">"waiter"</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="arch-box" style="flex:1;">
+                <div class="arch-title"><i class="fas fa-sliders-h" style="margin-right:8px;"></i>Hyperparameters</div>
+                <table class="hp-table">
+                    <tr><th>Parameter</th><th>BERT</th><th>DeBERTa</th></tr>
+                    <tr><td>Pre-trained Model</td><td>bert-base-uncased</td><td>microsoft/deberta-base</td></tr>
+                    <tr><td>Learning Rate</td><td>3e-5</td><td>2e-5</td></tr>
+                    <tr><td>Epochs</td><td>5</td><td>5</td></tr>
+                    <tr><td>Train Batch Size</td><td>16</td><td>8</td></tr>
+                    <tr><td>Eval Batch Size</td><td>32</td><td>16</td></tr>
+                    <tr><td>Max Seq Length</td><td>128</td><td>128</td></tr>
+                    <tr><td>Metric for Best</td><td>eval_f1</td><td>eval_f1</td></tr>
+                </table>
+            </div>
+            <div style="padding:12px; background:rgba(177,101,251,0.08); border-left:3px solid #B165FB; border-radius:4px;">
+                <span style="font-size:0.82rem; color:#E0E0E0;">
+                    <i class="fas fa-info-circle" style="color:#B165FB; margin-right:6px;"></i>
+                    Uses HuggingFace <strong>AutoModelForTokenClassification</strong> with Trainer API. DataCollator handles dynamic padding.
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

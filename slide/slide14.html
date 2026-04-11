@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BERT vs DeBERTa Comparison</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 25px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 35px; }
+.left-panel { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.comparison-row {
+    display: flex; gap: 12px; align-items: stretch;
+}
+.model-card {
+    flex: 1; border-radius: 8px; padding: 18px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+}
+.model-logo { font-size: 2rem; margin-bottom: 8px; }
+.model-name { font-size: 1.1rem; font-weight: 700; font-family: 'Sora', sans-serif; margin-bottom: 4px; }
+.model-full { font-size: 0.75rem; color: #9CA3AF; }
+.gain-table { width: 100%; border-collapse: collapse; }
+.gain-table th {
+    text-align: left; font-size: 0.78rem; color: #B165FB; padding: 8px 10px;
+    border-bottom: 2px solid rgba(177,101,251,0.3); font-weight: 700;
+    font-family: 'Sora', sans-serif;
+}
+.gain-table td {
+    font-size: 0.85rem; color: #E0E0E0; padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.gain-table tr:last-child td { border-bottom: none; }
+.gain { color: #4ADE80; font-weight: 700; }
+.gain-big { color: #4ADE80; font-weight: 700; font-size: 0.95rem; }
+.why-box {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px; flex: 1;
+}
+.why-title { font-size: 0.95rem; font-weight: 600; color: #B165FB; margin-bottom: 12px; font-family: 'Sora', sans-serif; }
+.why-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.why-icon { color: #C084FC; margin-top: 2px; font-size: 0.85rem; width: 16px; }
+.why-text { font-size: 0.85rem; color: #A0AEC0; line-height: 1.5; }
+.why-text strong { color: #E0E0E0; }
+.tradeoff-box {
+    padding: 14px; background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.2); border-radius: 8px;
+}
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">BERT vs DeBERTa</div>
+            <div class="subtitle">Head-to-Head Comparison Across All Experiments</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="comparison-row">
+                <div class="model-card" style="border-color:rgba(96,165,250,0.3);">
+                    <div class="model-logo" style="color:#60A5FA;">B</div>
+                    <div class="model-name" style="color:#60A5FA;">BERT</div>
+                    <div class="model-full">bert-base-uncased (110M params)</div>
+                </div>
+                <div style="display:flex; align-items:center; font-size:1.5rem; color:#B165FB; font-weight:800;">vs</div>
+                <div class="model-card" style="border-color:rgba(192,132,252,0.3);">
+                    <div class="model-logo" style="color:#C084FC;">D</div>
+                    <div class="model-name" style="color:#C084FC;">DeBERTa</div>
+                    <div class="model-full">microsoft/deberta-base (139M params)</div>
+                </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:16px; flex:1;">
+                <div style="font-size:0.9rem; font-weight:600; color:#B165FB; margin-bottom:10px; font-family:'Sora',sans-serif;">
+                    <i class="fas fa-arrow-up" style="margin-right:6px;"></i>DeBERTa Improvement Over BERT
+                </div>
+                <table class="gain-table">
+                    <tr><th>Setting</th><th>ATE F1 Gain</th><th>ASC Acc Gain</th></tr>
+                    <tr><td>Rest &rarr; Rest</td><td class="gain">+1.5 pp</td><td class="gain">+1.2 pp</td></tr>
+                    <tr><td>Rest &rarr; Lapt</td><td class="gain">+7.0 pp</td><td class="gain">+3.5 pp</td></tr>
+                    <tr><td>Lapt &rarr; Rest</td><td class="gain-big">+10.3 pp</td><td class="gain">-3.8 pp*</td></tr>
+                    <tr><td>Lapt &rarr; Lapt</td><td class="gain">+2.5 pp</td><td class="gain">+2.6 pp</td></tr>
+                </table>
+                <div style="margin-top:8px; font-size:0.75rem; color:#9CA3AF;">
+                    * Lapt&rarr;Rest ASC: BERT's anomalously high 92.2% from easy-subset selection effect
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="why-box">
+                <div class="why-title"><i class="fas fa-lightbulb" style="margin-right:8px;"></i>Why DeBERTa Wins</div>
+                <div class="why-item">
+                    <div class="why-icon"><i class="fas fa-random"></i></div>
+                    <div class="why-text"><strong>Disentangled attention</strong> separates content and position signals, helping the model distinguish tokens in multi-aspect sentences more precisely.</div>
+                </div>
+                <div class="why-item">
+                    <div class="why-icon"><i class="fas fa-arrows-alt-h"></i></div>
+                    <div class="why-text"><strong>Better boundary detection</strong> for multi-word aspects. Relative position encoding helps identify where aspect spans begin and end.</div>
+                </div>
+                <div class="why-item">
+                    <div class="why-icon"><i class="fas fa-globe"></i></div>
+                    <div class="why-text"><strong>More robust to domain shift</strong> in ATE. Biggest gain: Lapt&rarr;Rest ATE F1 jumps from 25.8% to 36.1% (+10.3 percentage points).</div>
+                </div>
+            </div>
+            <div class="tradeoff-box">
+                <div style="font-size:0.85rem; color:#E0E0E0; line-height:1.5;">
+                    <i class="fas fa-balance-scale" style="color:#FBBF24; margin-right:6px;"></i>
+                    <strong>Trade-off:</strong> DeBERTa requires smaller batch sizes (8 vs 16 for ATE) and slightly longer training time due to 26% more parameters. Worth it for the consistent quality gains.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

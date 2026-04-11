@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Conclusions & Takeaways</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 30px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.conclusions-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1;
+}
+.conclusion-card {
+    border-radius: 8px; padding: 18px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; gap: 14px; align-items: flex-start;
+}
+.conclusion-number {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #B165FB; color: white; display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; font-family: 'Sora', sans-serif;
+    flex-shrink: 0;
+}
+.conclusion-content { flex: 1; }
+.conclusion-title { font-size: 0.95rem; font-weight: 600; color: white; margin-bottom: 4px; font-family: 'Sora', sans-serif; }
+.conclusion-text { font-size: 0.82rem; color: #A0AEC0; line-height: 1.5; }
+.conclusion-text strong { color: #E0E0E0; }
+.bottom-takeaway {
+    margin-top: 16px; padding: 16px 20px; border-radius: 8px;
+    background: linear-gradient(135deg, rgba(177,101,251,0.12), rgba(177,101,251,0.04));
+    border: 1px solid rgba(177,101,251,0.25);
+    display: flex; align-items: center; gap: 16px;
+}
+.takeaway-icon { font-size: 1.5rem; color: #B165FB; }
+.takeaway-text { font-size: 0.95rem; color: #E0E0E0; line-height: 1.5; }
+.takeaway-text strong { color: white; }
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Conclusions</div>
+            <div class="subtitle">Key Takeaways from Our ABSA Pipeline Evaluation</div>
+        </div>
+    </div>
+    <div class="conclusions-grid">
+        <div class="conclusion-card">
+            <div class="conclusion-number">1</div>
+            <div class="conclusion-content">
+                <div class="conclusion-title">Pipeline Works End-to-End</div>
+                <div class="conclusion-text">Two-stage ATE &rarr; ASC successfully extracts (aspect, sentiment) pairs from raw text. In-domain: <strong>84% ASC accuracy</strong> on restaurant, <strong>80%</strong> on laptop.</div>
+            </div>
+        </div>
+        <div class="conclusion-card">
+            <div class="conclusion-number">2</div>
+            <div class="conclusion-content">
+                <div class="conclusion-title">ASC Transfers Well</div>
+                <div class="conclusion-text">Sentiment classification is <strong>robust to domain shift</strong>. Cross-domain ASC accuracy: 78-92%, nearly matching in-domain. Sentiment is universal.</div>
+            </div>
+        </div>
+        <div class="conclusion-card">
+            <div class="conclusion-number">3</div>
+            <div class="conclusion-content">
+                <div class="conclusion-title">ATE Is the Bottleneck</div>
+                <div class="conclusion-text">Cross-domain ATE drops to <strong>25-36% F1</strong> (vs 52-58% in-domain). ~85% of end-to-end errors originate from ATE failures.</div>
+            </div>
+        </div>
+        <div class="conclusion-card">
+            <div class="conclusion-number">4</div>
+            <div class="conclusion-content">
+                <div class="conclusion-title">Boundary Errors Dominate</div>
+                <div class="conclusion-text">~37% of ATE errors are <strong>boundary errors</strong> (partial spans). Multi-word aspects like "clam chowder" are the hardest challenge.</div>
+            </div>
+        </div>
+        <div class="conclusion-card">
+            <div class="conclusion-number">5</div>
+            <div class="conclusion-content">
+                <div class="conclusion-title">DeBERTa > BERT Consistently</div>
+                <div class="conclusion-text">DeBERTa outperforms BERT across all settings. Largest gain: <strong>+10.3 pp</strong> on cross-domain ATE. Worth the extra compute cost.</div>
+            </div>
+        </div>
+        <div class="conclusion-card">
+            <div class="conclusion-number">6</div>
+            <div class="conclusion-content">
+                <div class="conclusion-title">Neutral Class Is Hard</div>
+                <div class="conclusion-text">Neutral F1: 0.51-0.64 across settings (vs 0.88+ for Positive). <strong>Class imbalance</strong> (~20% Neutral) makes this the weakest class.</div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-takeaway">
+        <div class="takeaway-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="takeaway-text">
+            <strong>Practical takeaway:</strong> For real-world ABSA deployment, invest in <strong>better ATE</strong> (domain-specific training data, joint modeling). ASC can be reused across domains with minimal degradation.
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

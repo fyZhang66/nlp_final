@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dataset - SemEval 2014 Task 4</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 60px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 30px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 40px; }
+.left-panel { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.domain-card {
+    background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 20px; flex: 1;
+}
+.domain-header { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; }
+.domain-icon {
+    width: 36px; height: 36px; background-color: #B165FB; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+}
+.domain-title { font-size: 1.15rem; font-weight: 600; font-family: 'Sora', sans-serif; }
+.domain-stats { font-size: 0.88rem; color: #A0AEC0; line-height: 1.6; }
+.domain-stats strong { color: #E0E0E0; }
+.highlight { color: #B165FB; font-weight: 600; }
+.label-section {
+    background-color: rgba(177,101,251,0.08); border: 1px solid rgba(177,101,251,0.2);
+    border-radius: 8px; padding: 18px;
+}
+.label-title { font-size: 1rem; font-weight: 600; color: #B165FB; margin-bottom: 12px; font-family: 'Sora', sans-serif; }
+.label-row { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
+.label-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 4px;
+    font-size: 0.78rem; font-weight: 600; font-family: 'Monaco','Menlo',monospace;
+}
+.label-desc { font-size: 0.85rem; color: #A0AEC0; }
+.bar-chart { margin-top: 14px; }
+.bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
+.bar-label { width: 70px; font-size: 0.82rem; color: #A0AEC0; text-align: right; }
+.bar-track { flex: 1; height: 22px; background-color: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 0.75rem; font-weight: 600; }
+.bar-pct { font-size: 0.8rem; color: #E0E0E0; width: 40px; text-align: right; }
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Dataset</div>
+            <div class="subtitle">SemEval 2014 Task 4 — Standard ABSA Benchmark</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="domain-title">Restaurant Domain</div>
+                </div>
+                <div class="domain-stats">
+                    <strong>~3,000</strong> train / <strong>~800</strong> test sentences<br/>
+                    <strong>1,120</strong> aspect-sentiment pairs in test<br/>
+                    Aspects: food, service, ambiance, price<br/>
+                    <em style="color:#9CA3AF; font-size:0.82rem;">"The pasta is out of this world, but prices are steep."</em>
+                </div>
+            </div>
+            <div class="domain-card">
+                <div class="domain-header">
+                    <div class="domain-icon"><i class="fas fa-laptop"></i></div>
+                    <div class="domain-title">Laptop Domain</div>
+                </div>
+                <div class="domain-stats">
+                    <strong>~3,000</strong> train / <strong>~800</strong> test sentences<br/>
+                    <strong>638</strong> aspect-sentiment pairs in test<br/>
+                    Aspects: screen, battery, performance, design<br/>
+                    <em style="color:#9CA3AF; font-size:0.82rem;">"Battery life is great but the keyboard feels cheap."</em>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="label-section">
+                <div class="label-title"><i class="fas fa-tags" style="margin-right:8px;"></i>Label Formats</div>
+                <div class="label-row">
+                    <span class="label-tag" style="background:rgba(177,101,251,0.2); color:#B165FB;">ATE</span>
+                    <span class="label-desc">BIO tagging: <span style="color:#4ADE80;">B-ASP</span> / <span style="color:#4ADE80;">I-ASP</span> / <span style="color:#9CA3AF;">O</span></span>
+                </div>
+                <div class="label-row">
+                    <span class="label-tag" style="background:rgba(177,101,251,0.2); color:#B165FB;">ASC</span>
+                    <span class="label-desc">3-class: Positive / Negative / Neutral</span>
+                </div>
+                <div style="margin-top:8px; font-size:0.82rem; color:#9CA3AF;">
+                    Train/Val split: 90/10, Seed = 42 &nbsp;|&nbsp; Conflicts skipped
+                </div>
+            </div>
+            <div class="label-section" style="flex:1;">
+                <div class="label-title"><i class="fas fa-chart-bar" style="margin-right:8px;"></i>ASC Label Distribution</div>
+                <div class="bar-chart">
+                    <div class="bar-row">
+                        <div class="bar-label">Positive</div>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width:46%; background-color:#4ADE80;">46%</div>
+                        </div>
+                    </div>
+                    <div class="bar-row">
+                        <div class="bar-label">Negative</div>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width:34%; background-color:#EF4444;">34%</div>
+                        </div>
+                    </div>
+                    <div class="bar-row">
+                        <div class="bar-label">Neutral</div>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width:20%; background-color:#FBBF24;">20%</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:12px; padding:10px; background:rgba(177,101,251,0.08); border-left:3px solid #B165FB; border-radius:4px;">
+                    <span style="font-size:0.82rem; color:#E0E0E0;">
+                        <i class="fas fa-exclamation-triangle" style="color:#FBBF24; margin-right:6px;"></i>
+                        Class imbalance: Neutral underrepresented (~20%), may bias predictions
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

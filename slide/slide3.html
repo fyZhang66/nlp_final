@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Problem Definition - Two-Stage ABSA Pipeline</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            background-color: #181B24;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+        }
+        .content-container {
+            position: relative;
+            padding: 60px 80px;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .header-section {
+            display: flex;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+        .accent-bar {
+            width: 8px;
+            background-color: #B165FB;
+            margin-right: 20px;
+            height: 80px;
+        }
+        .title-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
+            color: white;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #A0AEC0;
+            margin-top: 5px;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 40px;
+        }
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .stage-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .stage-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .stage-number {
+            background-color: #B165FB;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 12px;
+            flex: 0 0 auto;
+        }
+        .stage-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            font-family: 'Sora', sans-serif;
+        }
+        .stage-description {
+            font-size: 0.9rem;
+            color: #A0AEC0;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .example-box {
+            background-color: rgba(177, 101, 251, 0.1);
+            border-left: 3px solid #B165FB;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .example-text {
+            font-size: 0.85rem;
+            color: #E0E0E0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            line-height: 1.5;
+        }
+        .pipeline-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(177, 101, 251, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(177, 101, 251, 0.2);
+        }
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .flow-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #B165FB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .flow-text {
+            font-size: 0.75rem;
+            color: #A0AEC0;
+            line-height: 1.2;
+        }
+        .flow-arrow {
+            color: #B165FB;
+            font-size: 1.2rem;
+        }
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            color: #A0AEC0;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+<div class="header-section">
+<div class="accent-bar"></div>
+<div class="title-container">
+<div class="title">Problem Definition</div>
+<div class="subtitle">Two-Stage End-to-End ABSA Pipeline: ATE + ASC</div>
+</div>
+</div>
+<div class="main-content">
+<div class="left-panel">
+<div class="stage-box">
+<div class="stage-header">
+<div class="stage-number">1</div>
+<div class="stage-title">Aspect Term Extraction (ATE)</div>
+</div>
+<div class="stage-description">
+                            Input: Raw review sentence<br/>
+                            Task: BIO sequence labeling (like NER) to extract aspect spans<br/>
+                            Output: Aspect terms with BIO tags
+                        </div>
+<div class="example-box">
+<div class="example-text">
+                                "The <span style="color: #B165FB; font-weight: bold;">[B-ASP]</span>clam <span style="color: #B165FB; font-weight: bold;">[I-ASP]</span>chowder was incredible but the <span style="color: #B165FB; font-weight: bold;">[B-ASP]</span>waiter was rude."
+                            </div>
+</div>
+</div>
+<div class="stage-box">
+<div class="stage-header">
+<div class="stage-number">2</div>
+<div class="stage-title">Aspect Sentiment Classification (ASC)</div>
+</div>
+<div class="stage-description">
+                            Input: (sentence, extracted aspect term)<br/>
+                            Task: Classify sentiment as Positive / Negative / Neutral<br/>
+                            Output: Sentiment label for each aspect
+                        </div>
+<div class="example-box">
+<div class="example-text">
+                                ("...clam chowder was incredible...", "clam chowder") → <span style="color: #4ADE80; font-weight: bold;">Positive</span>
+</div>
+</div>
+</div>
+</div>
+<div class="right-panel">
+<div class="stage-box" style="height: 100%;">
+<div class="stage-header">
+<div class="stage-title">Pipeline Flow</div>
+</div>
+<div class="pipeline-flow">
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-file-alt"></i></div>
+<div class="flow-text">Raw Text</div>
+</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-search"></i></div>
+<div class="flow-text">ATE</div>
+</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-tags"></i></div>
+<div class="flow-text">Extracted<br/>Aspects</div>
+</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-balance-scale"></i></div>
+<div class="flow-text">ASC</div>
+</div>
+<div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+<div class="flow-item">
+<div class="flow-icon"><i class="fas fa-check-circle"></i></div>
+<div class="flow-text">(Aspect,<br/>Sentiment)</div>
+</div>
+</div>
+<div style="margin-top: 20px; padding: 15px; background-color: rgba(177, 101, 251, 0.05); border-radius: 8px; border: 1px solid rgba(177, 101, 251, 0.2);">
+<div style="font-size: 0.9rem; color: #A0AEC0; margin-bottom: 10px; line-height: 1.4;">
+<i class="fas fa-info-circle" style="color: #B165FB; margin-right: 8px;"></i>
+                                Key Insight: The pipeline chains ATE and ASC to extract fine-grained sentiment from raw text
+                            </div>
+<div style="font-size: 0.85rem; color: #E0E0E0; line-height: 1.5;">
+<span style="color: #B165FB;">ATE</span> → Extracts aspect terms using BIO labeling<br/>
+<span style="color: #B165FB;">ASC</span> → Classifies sentiment for each extracted aspect
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="company-logo">NLP Final Project</div>
+</div>
+</body>
+</html>

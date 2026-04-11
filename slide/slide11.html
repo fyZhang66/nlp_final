@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Key Finding - ATE vs ASC Robustness</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 28px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.6rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 40px; }
+.left-panel { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.comparison-card {
+    border-radius: 10px; padding: 22px; flex: 1;
+    display: flex; flex-direction: column;
+}
+.card-ate {
+    background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.03));
+    border: 1px solid rgba(239,68,68,0.25);
+}
+.card-asc {
+    background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.03));
+    border: 1px solid rgba(74,222,128,0.25);
+}
+.card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.card-icon {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.card-title { font-size: 1.15rem; font-weight: 700; font-family: 'Sora', sans-serif; }
+.metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.metric-row:last-child { border-bottom: none; }
+.metric-label { font-size: 0.85rem; color: #A0AEC0; }
+.metric-value { font-size: 0.95rem; font-weight: 700; }
+.metric-range { font-size: 0.78rem; color: #9CA3AF; margin-left: 6px; }
+.drop-indicator {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.75rem; font-weight: 600;
+}
+.drop-bad { background: rgba(239,68,68,0.2); color: #EF4444; }
+.drop-good { background: rgba(74,222,128,0.2); color: #4ADE80; }
+.explanation-box {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px;
+}
+.exp-title { font-size: 0.95rem; font-weight: 600; color: white; margin-bottom: 10px; font-family: 'Sora', sans-serif; }
+.exp-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.exp-icon { color: #B165FB; margin-top: 2px; font-size: 0.85rem; width: 16px; }
+.exp-text { font-size: 0.85rem; color: #A0AEC0; line-height: 1.5; }
+.exp-text strong { color: #E0E0E0; }
+.anomaly-box {
+    padding: 14px; background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.2); border-radius: 8px;
+}
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">Key Finding</div>
+            <div class="subtitle">ATE Degrades Cross-Domain, but ASC Remains Robust</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="comparison-card card-ate">
+                <div class="card-header">
+                    <div class="card-icon" style="background:rgba(239,68,68,0.2); color:#EF4444;">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="card-title" style="color:#EF4444;">ATE F1 — Degrades Significantly</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">In-domain range</span>
+                    <span><span class="metric-value" style="color:#4ADE80;">52 – 58%</span></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Cross-domain range</span>
+                    <span><span class="metric-value" style="color:#EF4444;">25 – 36%</span>
+                    <span class="drop-indicator drop-bad">up to 56% relative drop</span></span>
+                </div>
+            </div>
+            <div class="comparison-card card-asc">
+                <div class="card-header">
+                    <div class="card-icon" style="background:rgba(74,222,128,0.2); color:#4ADE80;">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="card-title" style="color:#4ADE80;">ASC Accuracy — Surprisingly Stable</div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">In-domain range</span>
+                    <span><span class="metric-value" style="color:#4ADE80;">76 – 85%</span></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Cross-domain range</span>
+                    <span><span class="metric-value" style="color:#4ADE80;">78 – 92%</span>
+                    <span class="drop-indicator drop-good">remains high!</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="explanation-box" style="flex:1;">
+                <div class="exp-title"><i class="fas fa-lightbulb" style="color:#B165FB; margin-right:8px;"></i>Why?</div>
+                <div class="exp-item">
+                    <div class="exp-icon"><i class="fas fa-check"></i></div>
+                    <div class="exp-text"><strong>ASC transfers well:</strong> [CLS] sentence [SEP] aspect [SEP] captures sentiment patterns that are universal. Words like "great", "terrible", "okay" carry the same sentiment across domains.</div>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-icon"><i class="fas fa-times"></i></div>
+                    <div class="exp-text"><strong>ATE is domain-specific:</strong> "battery" is an aspect in laptops but not restaurants. "service" is common in restaurants but rare in laptop reviews. Aspect vocabularies don't transfer.</div>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-icon"><i class="fas fa-arrow-right"></i></div>
+                    <div class="exp-text"><strong>Implication:</strong> For real-world cross-domain ABSA, invest in better ATE or domain-specific training data. ASC can reuse existing models.</div>
+                </div>
+            </div>
+            <div class="anomaly-box">
+                <div style="font-size:0.85rem; color:#E0E0E0; line-height:1.5;">
+                    <i class="fas fa-star" style="color:#FBBF24; margin-right:6px;"></i>
+                    <strong>Anomaly:</strong> Lapt&rarr;Rest BERT gets <strong style="color:#4ADE80;">92.2%</strong> ASC accuracy on predicted aspects (higher than gold 80.2%!). When ATE only extracts high-confidence easy aspects, ASC gets an easier subset to classify.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

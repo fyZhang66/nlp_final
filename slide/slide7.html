@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>In-Domain ATE Results</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 30px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.8rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.results-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+.results-table th {
+    text-align: left; font-size: 0.9rem; color: #B165FB; padding: 12px 16px;
+    border-bottom: 2px solid rgba(177,101,251,0.4); font-weight: 700;
+    font-family: 'Sora', sans-serif;
+}
+.results-table td {
+    font-size: 0.95rem; color: #E0E0E0; padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.results-table tr:hover td { background-color: rgba(177,101,251,0.05); }
+.model-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 4px;
+    font-size: 0.78rem; font-weight: 600;
+}
+.model-bert { background: rgba(59,130,246,0.2); color: #60A5FA; }
+.model-deberta { background: rgba(168,85,247,0.2); color: #C084FC; }
+.f1-value { font-weight: 700; font-size: 1.1rem; }
+.best { color: #4ADE80; }
+.delta { font-size: 0.78rem; color: #4ADE80; margin-left: 6px; }
+.takeaway-grid { display: flex; gap: 20px; flex: 1; }
+.takeaway-card {
+    flex: 1; padding: 16px; border-radius: 8px;
+    background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+}
+.takeaway-icon { color: #B165FB; font-size: 1.2rem; margin-bottom: 8px; }
+.takeaway-title { font-size: 0.9rem; font-weight: 600; color: white; margin-bottom: 6px; font-family: 'Sora', sans-serif; }
+.takeaway-text { font-size: 0.82rem; color: #A0AEC0; line-height: 1.5; }
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">In-Domain ATE Results</div>
+            <div class="subtitle">Standalone Aspect Term Extraction — Entity-level F1 (seqeval, exact span match)</div>
+        </div>
+    </div>
+    <table class="results-table">
+        <tr>
+            <th>Domain</th>
+            <th>Model</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1 Score</th>
+        </tr>
+        <tr>
+            <td>Restaurant</td>
+            <td><span class="model-tag model-bert">BERT</span></td>
+            <td>81.2%</td>
+            <td>85.5%</td>
+            <td><span class="f1-value">83.3%</span></td>
+        </tr>
+        <tr>
+            <td>Restaurant</td>
+            <td><span class="model-tag model-deberta">DeBERTa</span></td>
+            <td>84.0%</td>
+            <td>88.4%</td>
+            <td><span class="f1-value best">86.2%</span><span class="delta">+2.9</span></td>
+        </tr>
+        <tr>
+            <td>Laptop</td>
+            <td><span class="model-tag model-bert">BERT</span></td>
+            <td>74.5%</td>
+            <td>81.0%</td>
+            <td><span class="f1-value">77.6%</span></td>
+        </tr>
+        <tr>
+            <td>Laptop</td>
+            <td><span class="model-tag model-deberta">DeBERTa</span></td>
+            <td>80.5%</td>
+            <td>83.1%</td>
+            <td><span class="f1-value best">81.8%</span><span class="delta">+4.2</span></td>
+        </tr>
+    </table>
+    <div class="takeaway-grid">
+        <div class="takeaway-card">
+            <div class="takeaway-icon"><i class="fas fa-trophy"></i></div>
+            <div class="takeaway-title">DeBERTa Wins</div>
+            <div class="takeaway-text">Outperforms BERT by +2.9% (rest.) and +4.2% (laptop) in F1. Disentangled attention helps with aspect boundary detection.</div>
+        </div>
+        <div class="takeaway-card">
+            <div class="takeaway-icon"><i class="fas fa-utensils"></i></div>
+            <div class="takeaway-title">Restaurant Easier</div>
+            <div class="takeaway-text">Higher F1 across both models. Restaurant aspects (food, service) have more consistent patterns than laptop aspects.</div>
+        </div>
+        <div class="takeaway-card">
+            <div class="takeaway-icon"><i class="fas fa-search"></i></div>
+            <div class="takeaway-title">Recall > Precision</div>
+            <div class="takeaway-text">Models tend to over-extract (higher recall), generating some false positive aspect terms. Better to find more than miss.</div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Error Analysis - E2E Error Tracing</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+.slide-container {
+    width: 1280px; height: 720px; position: relative;
+    background-color: #181B24; color: white;
+    font-family: 'Manrope', sans-serif; overflow: hidden;
+}
+.content-container {
+    position: relative; padding: 50px 80px; z-index: 10;
+    height: 100%; display: flex; flex-direction: column; box-sizing: border-box;
+}
+.header-section { display: flex; margin-bottom: 25px; align-items: flex-start; }
+.accent-bar { width: 8px; background-color: #B165FB; margin-right: 20px; height: 80px; }
+.title { font-size: 2.6rem; font-weight: 700; font-family: 'Sora', sans-serif; color: white; line-height: 1; margin-bottom: 5px; }
+.subtitle { font-size: 1.1rem; color: #A0AEC0; margin-top: 5px; }
+.main-content { display: flex; flex: 1; gap: 35px; }
+.left-panel { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+.trace-card {
+    border-radius: 8px; padding: 16px;
+    background: rgba(255,255,255,0.05); border-left: 4px solid;
+    display: flex; flex-direction: column; gap: 8px;
+}
+.trace-header { display: flex; align-items: center; justify-content: space-between; }
+.trace-name { font-size: 0.95rem; font-weight: 600; font-family: 'Sora', sans-serif; }
+.trace-pct { font-size: 0.85rem; font-weight: 700; }
+.trace-desc { font-size: 0.82rem; color: #A0AEC0; line-height: 1.5; }
+.trace-flow {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.78rem; color: #E0E0E0; padding: 6px 10px;
+    background: rgba(0,0,0,0.2); border-radius: 4px;
+    font-family: 'Monaco','Menlo',monospace;
+}
+.flow-arrow { color: #B165FB; }
+.pipeline-diagram {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 20px; flex: 1;
+}
+.pd-title { font-size: 0.95rem; font-weight: 600; color: #B165FB; margin-bottom: 16px; font-family: 'Sora', sans-serif; }
+.pd-flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin-bottom: 20px;
+}
+.pd-block {
+    padding: 10px 16px; border-radius: 6px; text-align: center;
+    font-size: 0.82rem; font-weight: 600;
+}
+.pd-block.ate { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #EF4444; }
+.pd-block.asc { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); color: #4ADE80; }
+.pd-block.input { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #E0E0E0; }
+.pd-arrow { color: #B165FB; font-size: 1rem; }
+.pd-bar-section { margin-top: 10px; }
+.pd-bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 6px; }
+.pd-bar-label { width: 140px; font-size: 0.75rem; color: #A0AEC0; text-align: right; }
+.pd-bar-track { flex: 1; height: 24px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
+.pd-bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 0.7rem; font-weight: 600; color: white; }
+.insight-box {
+    padding: 14px; background: rgba(177,101,251,0.08); border-left: 3px solid #B165FB;
+    border-radius: 4px;
+}
+.company-logo { position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7; color: #A0A0A0; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<div class="content-container">
+    <div class="header-section">
+        <div class="accent-bar"></div>
+        <div>
+            <div class="title">End-to-End Error Tracing</div>
+            <div class="subtitle">How ATE Errors Propagate Through the Pipeline</div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <div class="trace-card" style="border-color:#EF4444;">
+                <div class="trace-header">
+                    <div class="trace-name" style="color:#EF4444;">ATE Miss &rarr; Sentiment Lost</div>
+                    <div class="trace-pct" style="color:#EF4444;">20-30%</div>
+                </div>
+                <div class="trace-desc">Gold aspect not extracted at all. Its sentiment is completely missed in the output.</div>
+                <div class="trace-flow">
+                    Gold: "wait time" <span class="flow-arrow">&rarr;</span> ATE: <span style="color:#EF4444;">missed</span> <span class="flow-arrow">&rarr;</span> Sentiment: <span style="color:#EF4444;">lost</span>
+                </div>
+            </div>
+            <div class="trace-card" style="border-color:#60A5FA;">
+                <div class="trace-header">
+                    <div class="trace-name" style="color:#60A5FA;">ATE Boundary &rarr; Wrong Sentiment</div>
+                    <div class="trace-pct" style="color:#60A5FA;">20-30%</div>
+                </div>
+                <div class="trace-desc">Partial extraction leads to different context, often yielding wrong sentiment.</div>
+                <div class="trace-flow">
+                    Gold: "delivery times" <span class="flow-arrow">&rarr;</span> ATE: <span style="color:#60A5FA;">"delivery"</span> <span class="flow-arrow">&rarr;</span> Sentiment: <span style="color:#FBBF24;">wrong</span>
+                </div>
+            </div>
+            <div class="trace-card" style="border-color:#FBBF24;">
+                <div class="trace-header">
+                    <div class="trace-name" style="color:#FBBF24;">ATE Spurious &rarr; Extra Prediction</div>
+                    <div class="trace-pct" style="color:#FBBF24;">10-20%</div>
+                </div>
+                <div class="trace-desc">False positive aspect generates a phantom sentiment prediction.</div>
+                <div class="trace-flow">
+                    Gold: (none) <span class="flow-arrow">&rarr;</span> ATE: <span style="color:#FBBF24;">"place"</span> <span class="flow-arrow">&rarr;</span> Sentiment: <span style="color:#FBBF24;">phantom</span>
+                </div>
+            </div>
+            <div class="trace-card" style="border-color:#C084FC;">
+                <div class="trace-header">
+                    <div class="trace-name" style="color:#C084FC;">Correct ATE &rarr; Sentiment Mismatch</div>
+                    <div class="trace-pct" style="color:#C084FC;">5-15%</div>
+                </div>
+                <div class="trace-desc">Aspect correctly extracted but ASC predicts the wrong polarity.</div>
+                <div class="trace-flow">
+                    Gold: "service" (Neg) <span class="flow-arrow">&rarr;</span> ATE: <span style="color:#4ADE80;">correct</span> <span class="flow-arrow">&rarr;</span> ASC: <span style="color:#C084FC;">Neutral</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="pipeline-diagram">
+                <div class="pd-title"><i class="fas fa-project-diagram" style="margin-right:8px;"></i>Error Source Distribution</div>
+                <div class="pd-flow">
+                    <div class="pd-block input">Raw Text</div>
+                    <div class="pd-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="pd-block ate">ATE<br/><span style="font-size:0.7rem; opacity:0.8;">~85% of errors</span></div>
+                    <div class="pd-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="pd-block asc">ASC<br/><span style="font-size:0.7rem; opacity:0.8;">~15% of errors</span></div>
+                </div>
+                <div class="pd-bar-section">
+                    <div class="pd-bar-row">
+                        <div class="pd-bar-label">ATE Miss &rarr; Lost</div>
+                        <div class="pd-bar-track"><div class="pd-bar-fill" style="width:28%; background:#EF4444;">28%</div></div>
+                    </div>
+                    <div class="pd-bar-row">
+                        <div class="pd-bar-label">ATE Boundary &rarr; Wrong</div>
+                        <div class="pd-bar-track"><div class="pd-bar-fill" style="width:25%; background:#60A5FA;">25%</div></div>
+                    </div>
+                    <div class="pd-bar-row">
+                        <div class="pd-bar-label">ATE Spurious &rarr; Extra</div>
+                        <div class="pd-bar-track"><div class="pd-bar-fill" style="width:18%; background:#FBBF24;">18%</div></div>
+                    </div>
+                    <div class="pd-bar-row">
+                        <div class="pd-bar-label">Correct &rarr; Mismatch</div>
+                        <div class="pd-bar-track"><div class="pd-bar-fill" style="width:12%; background:#C084FC;">12%</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="insight-box">
+                <div style="font-size:0.85rem; color:#E0E0E0; line-height:1.6;">
+                    <i class="fas fa-lightbulb" style="color:#B165FB; margin-right:6px;"></i>
+                    <strong>Key insight:</strong> Most end-to-end errors (~85%) originate from <span style="color:#EF4444; font-weight:600;">ATE</span>, not ASC. Improving extraction quality would have the biggest impact on overall system performance.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="company-logo">NLP Final Project - INFO 7610</div>
+</div>
+</body>
+</html>
