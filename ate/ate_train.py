@@ -1,28 +1,40 @@
-import os
+"""ATE token-classification training. Paths and hyperparameters from ``pipeline.config``."""
+
+from __future__ import annotations
+
+import argparse
 import json
+import os
+import sys
+from pathlib import Path
+
 import numpy as np
 from datasets import load_from_disk
-from transformers import (
-    AutoTokenizer,
-    AutoModelForTokenClassification,
-    TrainingArguments,
-    Trainer,
-    DataCollatorForTokenClassification,
-)
 from seqeval.metrics import f1_score, precision_score, recall_score
+from transformers import (
+    AutoModelForTokenClassification,
+    AutoTokenizer,
+    DataCollatorForTokenClassification,
+    Trainer,
+    TrainingArguments,
+)
 
-# ── Config ────────────────────────────────────────────────────
-MODEL_NAME = "bert-base-uncased"
-DATA_PATH = "ate_data_restaurant"
-OUTPUT_DIR = "./ate_output"
-MAX_LEN = 128
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from pipeline.config import (  # noqa: E402
+    BACKBONE_PRESETS,
+    MAX_LEN,
+    ate_training_run_dir,
+    hf_ate_dataset_dir,
+)
 
 LABEL_LIST = ["O", "B-ASP", "I-ASP"]
 LABEL2ID = {l: i for i, l in enumerate(LABEL_LIST)}
 ID2LABEL = {i: l for i, l in enumerate(LABEL_LIST)}
 
 
-# ── Tokenize + align labels ───────────────────────────────────
 def tokenize_and_align(examples, tokenizer):
     enc = tokenizer(
         examples["tokens"],
@@ -44,7 +56,6 @@ def tokenize_and_align(examples, tokenizer):
             elif wid != prev_word:
                 labels.append(LABEL2ID.get(tags[wid], 0))
             else:
-                # subword continuation:
                 tag = tags[wid]
                 if tag in ["B-ASP", "I-ASP"]:
                     labels.append(LABEL2ID["I-ASP"])
@@ -58,7 +69,6 @@ def tokenize_and_align(examples, tokenizer):
     return enc
 
 
-# ── Metrics ───────────────────────────────────────────────────
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     preds = np.argmax(logits, axis=-1)
@@ -81,13 +91,31 @@ def compute_metrics(eval_pred):
     }
 
 
-# ── Main ──────────────────────────────────────────────────────
-def main():
-    print(f"Loading data from {DATA_PATH} ...")
-    ds = load_from_disk(DATA_PATH)
+def train_ate(domain: str, model_name: str) -> None:
+    data_path = hf_ate_dataset_dir(domain)
+    output_dir = ate_training_run_dir(domain, model_name)
+    preset = BACKBONE_PRESETS[model_name]
+    hf_model = preset["hf_model"]
+    hp = preset["ate"]
 
-    print(f"Loading tokenizer: {MODEL_NAME} ...")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+    if not os.path.isdir(data_path):
+        raise FileNotFoundError(
+            f"ATE dataset not found: {data_path}\n"
+            f"Run: python ate/ate_prepare_data.py --domain {domain}"
+        )
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    print(f"Domain={domain}  backbone={model_name}")
+    print(f"Loading data from {data_path} …")
+    ds = load_from_disk(data_path)
+
+    tok_kw = {}
+    if model_name == "deberta":
+        tok_kw["add_prefix_space"] = True
+
+    print(f"Loading tokenizer: {hf_model} …")
+    tokenizer = AutoTokenizer.from_pretrained(hf_model, **tok_kw)
 
     tokenized = ds.map(
         lambda ex: tokenize_and_align(ex, tokenizer),
@@ -95,20 +123,20 @@ def main():
         remove_columns=ds["train"].column_names,
     )
 
-    print(f"Loading model: {MODEL_NAME} ...")
+    print(f"Loading model: {hf_model} …")
     model = AutoModelForTokenClassification.from_pretrained(
-        MODEL_NAME,
+        hf_model,
         num_labels=len(LABEL_LIST),
         id2label=ID2LABEL,
         label2id=LABEL2ID,
     )
 
     args = TrainingArguments(
-        output_dir=OUTPUT_DIR,
-        num_train_epochs=5,
-        per_device_train_batch_size=16,
-        per_device_eval_batch_size=32,
-        learning_rate=3e-5,
+        output_dir=output_dir,
+        num_train_epochs=hp["num_train_epochs"],
+        per_device_train_batch_size=hp["per_device_train_batch_size"],
+        per_device_eval_batch_size=hp["per_device_eval_batch_size"],
+        learning_rate=hp["learning_rate"],
         weight_decay=0.01,
         warmup_steps=100,
         eval_strategy="epoch",
@@ -132,22 +160,40 @@ def main():
         compute_metrics=compute_metrics,
     )
 
-    print("Training ...")
+    print("Training …")
     trainer.train()
 
-    final_dir = os.path.join(OUTPUT_DIR, "final")
+    final_dir = os.path.join(output_dir, "final")
     trainer.save_model(final_dir)
     tokenizer.save_pretrained(final_dir)
-    print(f"Model saved -> {final_dir}")
+    print(f"Model saved → {final_dir}")
 
-    print("\nEvaluating on test set ...")
+    print("\nEvaluating on test set …")
     results = trainer.evaluate(tokenized["test"])
     print(f"Test F1:        {results['eval_f1']:.4f}")
     print(f"Test Precision: {results['eval_precision']:.4f}")
     print(f"Test Recall:    {results['eval_recall']:.4f}")
 
-    with open(os.path.join(OUTPUT_DIR, "test_results.json"), "w") as f:
+    with open(os.path.join(output_dir, "test_results.json"), "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Train ATE (token classification)")
+    ap.add_argument(
+        "--domain",
+        choices=["restaurant", "laptop"],
+        default="restaurant",
+        help="Training domain (must match prepared HF dataset).",
+    )
+    ap.add_argument(
+        "--model_name",
+        choices=["bert", "deberta"],
+        default="bert",
+        help="Backbone; paths follow pipeline.config.MODELS.",
+    )
+    args = ap.parse_args()
+    train_ate(args.domain, args.model_name)
 
 
 if __name__ == "__main__":
