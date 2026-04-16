@@ -48,12 +48,12 @@ We use the **SemEval-2014 Task 4** datasets for **restaurants** and **laptops**:
 
 **ATE** is scored with span-level **precision, recall, and F1** against gold aspects on the test set. **ASC** is scored with **accuracy** and **macro-averaged F1** over the three classes. For pipeline analysis we compute ASC twice: **ASC (gold)** feeds the classifier **annotated** aspects; **ASC (pred)** feeds it **predicted** aspects from ATE. The **error-propagation gap** is
 
-\[
+$$
 \Delta_{\text{acc}} = \text{Acc}_{\text{gold}} - \text{Acc}_{\text{pred}}, \quad
 \Delta_{\text{F1}} = \text{Macro-F1}_{\text{gold}} - \text{Macro-F1}_{\text{pred}}.
-\]
+$$
 
-Positive \(\Delta\) means predicted aspects **hurt** sentiment relative to oracle spans; **negative** \(\Delta\) means predicted aspects **appear easier** than gold—typically when predictions omit difficult aspects or introduce spurious easy-to-classify terms.
+Positive $\Delta$ means predicted aspects **hurt** sentiment relative to oracle spans; **negative** $\Delta$ means predicted aspects **appear easier** than gold—typically when predictions omit difficult aspects or introduce spurious easy-to-classify terms.
 
 **End-to-end pairing.** For each gold aspect, pipeline evaluation checks whether a **matching** predicted aspect (under the project’s span-matching rules) carries the **correct** sentiment. Unmatched gold aspects count against recall; unmatched predicted aspects can create **false positives** if spurious spans receive confident sentiment predictions. This coupling is why **ATE recall** especially influences whether ASC errors are even **measurable** on full gold coverage.
 
@@ -78,7 +78,7 @@ ATE is implemented as token classification; ASC uses a **sentence-pair** encodin
 
 ### 3.3 Cross-domain protocol
 
-For each backbone, we evaluate **eight** experiments: **(train domain, test domain)** \(\in\) {restaurant, laptop}\(^2\), covering **in-domain** baselines and **both** cross-domain directions. ATE and ASC weights always come from the **same training domain**; only the **test XML** changes. This isolates **domain shift** at evaluation time while keeping the training recipe fixed.
+For each backbone, we evaluate **eight** experiments: **(train domain, test domain)** $\in \{\text{restaurant}, \text{laptop}\}^2$, covering **in-domain** baselines and **both** cross-domain directions. ATE and ASC weights always come from the **same training domain**; only the **test XML** changes. This isolates **domain shift** at evaluation time while keeping the training recipe fixed.
 
 ### 3.4 Analysis artifacts
 
@@ -130,7 +130,7 @@ Beyond scalar metrics, the pipeline exports **confusion matrices** (absolute cou
 
 **ASC on gold aspects** remains comparatively **stable** across conditions (accuracy often in the **0.76–0.84** band), suggesting that—with explicit targets—the sentiment model is **not** the primary failure mode under shift in this setup.
 
-**Error-propagation gaps.** Several runs show **negative** \(\Delta_{\text{acc}}\): predicted-aspect accuracy **exceeds** gold-aspect accuracy (IDs 1, 3, 4, 5, 6, 7, 8 for accuracy). This arises when the extractor **drops** hard-to-classify aspects or **focuses** on salient sentiment cues, making the predicted subset **easier** than the full gold set. The strongest effect appears for **ID 5** (laptop → restaurant, BERT): gold accuracy **0.8018** versus predicted **0.9218**, with \(\Delta_{\text{acc}} = -0.12\). By contrast, **macro-F1** on predicted aspects can still trail gold (ID 5: \(\Delta_{\text{m-F1}} = -0.1384\)), showing that **headline accuracy** alone can obscure **class-balanced** degradation.
+**Error-propagation gaps.** Several runs show **negative** $\Delta_{\text{acc}}$: predicted-aspect accuracy **exceeds** gold-aspect accuracy (IDs 1, 3, 4, 5, 6, 7, 8 for accuracy). This arises when the extractor **drops** hard-to-classify aspects or **focuses** on salient sentiment cues, making the predicted subset **easier** than the full gold set. The strongest effect appears for **ID 5** (laptop → restaurant, BERT): gold accuracy **0.8018** versus predicted **0.9218**, with $\Delta_{\text{acc}} = -0.12$. By contrast, **macro-F1** on predicted aspects can still trail gold (ID 5: $\Delta_{\text{m-F1}} = -0.1384$), showing that **headline accuracy** alone can obscure **class-balanced** degradation.
 
 ### 5.2 BERT versus DeBERTa
 
@@ -140,7 +140,7 @@ Beyond scalar metrics, the pipeline exports **confusion matrices** (absolute cou
 
 **Cross-domain:** DeBERTa’s ATE F1 exceeds BERT’s for **restaurant → laptop** (**0.3247** vs. **0.2548**) and **laptop → restaurant** (**0.3611** vs. **0.2579**), showing **encoder upgrades** help **span ID** under shift, though F1 remains low in absolute terms.
 
-**Interpreting laptop → restaurant (IDs 5–6).** The extractor’s **precision–recall asymmetry** is extreme: many predicted spans are locally plausible (**high precision**) yet **most** gold aspects are missed (**low recall**). For sentiment, evaluating on **predicted** aspects therefore **skips** numerous gold pairs—especially subtle or rare mentions—while ASC may still classify the **surviving** subset with high accuracy. This dynamic explains the **large negative \(\Delta_{\text{acc}}\)** combined with a **substantial macro-F1 drop** on predicted aspects for ID 5: the model is **not** universally “better” on predicted inputs; accuracy is inflated by **coverage bias**.
+**Interpreting laptop → restaurant (IDs 5–6).** The extractor’s **precision–recall asymmetry** is extreme: many predicted spans are locally plausible (**high precision**) yet **most** gold aspects are missed (**low recall**). For sentiment, evaluating on **predicted** aspects therefore **skips** numerous gold pairs—especially subtle or rare mentions—while ASC may still classify the **surviving** subset with high accuracy. This dynamic explains the **large negative $\Delta_{\text{acc}}$** combined with a **substantial macro-F1 drop** on predicted aspects for ID 5: the model is **not** universally “better” on predicted inputs; accuracy is inflated by **coverage bias**.
 
 **Interpreting restaurant → laptop (IDs 3–4).** Both backbones suffer low ATE F1, but DeBERTa raises F1 by ~**7** points absolute versus BERT. ASC on gold remains mid-to-high seventies to low eighties in accuracy, reinforcing that **target identification**—not polarity modeling in isolation—is the limiting factor when moving to laptop test vocabulary.
 
