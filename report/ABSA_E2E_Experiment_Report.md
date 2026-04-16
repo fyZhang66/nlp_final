@@ -1,14 +1,12 @@
 # End-to-End Aspect-Based Sentiment Analysis with Cascaded ATE and ASC on SemEval-2014
 
-**Yubo Wang**  
-INFO 7610 — Natural Language Processing (course project)  
-Collaborators: Gousu Ding (ATE), Fangyuan Zhang (ASC), Yunzhu Chen (DeBERTa variants)
+**Yubo Wang, Gousu Ding, Fangyuan Zhang, and Yunzhu Chen**
 
 ---
 
 ## Abstract
 
-Aspect-based sentiment analysis (ABSA) in real review settings requires both locating opinion targets (aspect terms) and assigning polarity to each target. We study a practical **cascade** in which a span-level **aspect term extraction (ATE)** model feeds an **aspect sentiment classification (ASC)** model that consumes sentence–aspect pairs. Using the SemEval-2014 Task 4 restaurant and laptop benchmarks, we train domain-specific ATE and ASC modules with two encoder backbones—**BERT-base** and **DeBERTa-base**—and evaluate the full pipeline under **in-domain** and **cross-domain** test conditions (eight configurations in total). We report **ATE** precision, recall, and F1, **ASC** accuracy and macro-F1 under **gold** versus **predicted** aspects (the latter reflecting true deployment), and the **error-propagation gap** between the two ASC evaluations. Quantitatively, ATE F1 collapses under domain shift (e.g., from 0.56 in-domain restaurant to 0.25–0.36 on cross-domain tests), while ASC on gold aspects remains relatively stable, indicating that **span extraction** is the dominant bottleneck for end-to-end quality. Surprisingly, ASC accuracy on **predicted** aspects can **exceed** gold-aspect accuracy when the extractor returns a biased subset of “easier” spans; we interpret this pattern as a **selection effect** rather than genuine improvement. Complementing aggregate scores, we analyze **row-normalized confusion matrices**, **ATE span-error distributions**, and **end-to-end error tracing** attributing mistakes to missed aspects, boundary errors, spurious terms, or ASC failures. Materials—including figures and the consolidated metric file `pipeline/outputs/cross_domain_summary.json`—support reproducibility within the project codebase.
+Aspect-based sentiment analysis (ABSA) in real review settings requires both locating opinion targets (aspect terms) and assigning polarity to each target. We study a practical **cascade** in which a span-level **aspect term extraction (ATE)** model feeds an **aspect sentiment classification (ASC)** model that consumes sentence–aspect pairs. Using the SemEval-2014 Task 4 restaurant and laptop benchmarks, we train domain-specific ATE and ASC modules with two encoder backbones—**BERT-base** and **DeBERTa-base**—and evaluate the full pipeline under **in-domain** and **cross-domain** test conditions (eight configurations in total). We report **ATE** precision, recall, and F1, **ASC** accuracy and macro-F1 under **gold** versus **predicted** aspects (the latter reflecting true deployment), and the **error-propagation gap** between the two ASC evaluations. Quantitatively, ATE F1 collapses under domain shift (e.g., from 0.56 in-domain restaurant to 0.25–0.36 on cross-domain tests), while ASC on gold aspects remains relatively stable, indicating that **span extraction** is the dominant bottleneck for end-to-end quality. Surprisingly, ASC accuracy on **predicted** aspects can **exceed** gold-aspect accuracy when the extractor returns a biased subset of “easier” spans; we interpret this pattern as a **selection effect** rather than genuine improvement. Complementing aggregate scores, we analyze **row-normalized confusion matrices**, **ATE span-error distributions**, and **end-to-end error tracing** attributing mistakes to missed aspects, boundary errors, spurious terms, or ASC failures.
 
 ---
 
@@ -18,9 +16,9 @@ Online reviews drive decisions in hospitality, retail, and technology markets. S
 
 Modularity comes with a cost: **errors compound**. An extractor that misses a negative aspect entirely prevents the classifier from ever recovering that signal; an extractor that proposes a slightly wrong boundary may feed the classifier a misleading cue word; spurious aspects generate sentiment labels that do not exist in the annotation. Understanding **where** failures arise is therefore as important as reporting a single end-to-end F1. Prior work on ABSA frequently reports **joint** models or **pipeline** results, but cross-domain studies often emphasize sentiment or domain adaptation **without** isolating the ATE stage’s contribution in a fully wired system.
 
-This work documents an **end-to-end ATE → ASC pipeline** for SemEval-2014 **Restaurant** and **Laptop** domains. We compare **BERT-base-uncased** and **DeBERTa-base** within a common preprocessing and evaluation pipeline, using model-specific hyperparameters while holding data splits consistent across teammates. The experimental matrix covers **eight** settings: for each backbone, we test **in-domain** (train and test on the same domain) and **cross-domain** (train ATE/ASC on one domain, evaluate on the other’s test XML) in both directions. We align evaluation with two ASC regimes: **oracle aspects** (gold spans), which upper-bound sentiment quality absent extraction noise, and **predicted aspects**, which reflect **realistic** pipeline behavior.
+This work documents an **end-to-end ATE → ASC pipeline** for SemEval-2014 **Restaurant** and **Laptop** domains. We compare **BERT-base-uncased** and **DeBERTa-base** within a common preprocessing and evaluation pipeline, using model-specific hyperparameters while holding data splits consistent across teammates. The experimental matrix covers **eight** settings: for each backbone, we test **in-domain** (train and test on the same domain) and **cross-domain** (train ATE/ASC on one domain, evaluate on the other domain’s test set) in both directions. We align evaluation with two ASC regimes: **oracle aspects** (gold spans), which upper-bound sentiment quality absent extraction noise, and **predicted aspects**, which reflect **realistic** pipeline behavior.
 
-Our **contributions** are empirical and diagnostic: (i) a complete **numeric dashboard** for cascade ABSA on standard benchmarks with modern encoders; (ii) explicit **error-propagation** measurement between gold- and predicted-aspect ASC; and (iii) a **structured error analysis**—confusion matrices, span-level ATE error typing, and end-to-end attribution—grounded in exported JSON/JSONL artifacts from the shared codebase. We discuss when **improving ATE** should take priority over **improving ASC**, particularly under domain shift, and when aggregate accuracy can be **misleading** due to extractor-induced selection bias.
+Our **contributions** are empirical and diagnostic: (i) a complete **numeric dashboard** for cascade ABSA on standard benchmarks with modern encoders; (ii) explicit **error-propagation** measurement between gold- and predicted-aspect ASC; and (iii) a **structured error analysis**—confusion matrices, span-level ATE error typing, and end-to-end attribution—grounded in exported evaluation artifacts. We discuss when **improving ATE** should take priority over **improving ASC**, particularly under domain shift, and when aggregate accuracy can be **misleading** due to extractor-induced selection bias.
 
 **Positioning.** Neural **joint** ABSA systems (span + sentiment in one objective) can implicitly share representations; however, **cascaded** systems remain widespread because they map cleanly to existing tooling, allow **independent** iteration on tagging versus classification, and support **cross-domain** reuse of a sentiment head when only the extractor is retrained. Our study does not claim state-of-the-art joint modeling; instead, it **quantifies cascade behavior** under transparent assumptions that match many engineering roadmaps.
 
@@ -40,9 +38,9 @@ The **end-to-end** objective is to output a set of **(aspect, sentiment)** pairs
 
 ### 2.2 Corpora
 
-We use the **SemEval-2014 Task 4** datasets for **restaurants** and **laptops**: official training XML for model fitting (with a fixed sentence-level train/validation split shared across ATE and ASC preparation scripts) and official **gold test** XML for final evaluation. Restaurant and laptop reviews differ lexically and pragmatically: food discourse involves taste and service vocabulary; laptop discourse emphasizes hardware attributes (*keyboard*, *fan noise*) and performance. These differences motivate **domain-conditioned** models and stress-test **cross-domain** generalization when train and test domains diverge. Both domains use the same **three-way** polarity inventory for ASC, which keeps metrics **comparable** across experiments.
+We use the **SemEval-2014 Task 4** datasets for **restaurants** and **laptops**: official training data for model fitting, a fixed sentence-level train/validation split, and the official gold test sets for final evaluation. Restaurant and laptop reviews differ lexically and pragmatically: food discourse involves taste and service vocabulary; laptop discourse emphasizes hardware attributes (*keyboard*, *fan noise*) and performance. These differences motivate **domain-conditioned** models and stress-test **cross-domain** generalization when train and test domains diverge. Both domains use the same **three-way** polarity inventory for ASC, which keeps metrics **comparable** across experiments.
 
-**Preprocessing and splits.** Training examples for ATE and ASC are produced by team scripts that tokenize consistently with the Hugging Face backbones and preserve **aligned** train/validation partitions at the **sentence** level. The **test** partition is always the official SemEval gold file for the target domain. We do **not** perform additional random test splits; all numbers reported here are **comparable** across backbones because they consume the **same** underlying XML for a given experiment ID.
+**Preprocessing and splits.** Training examples for ATE and ASC are tokenized consistently with the corresponding pretrained encoders and preserve **aligned** train/validation partitions at the **sentence** level. The **test** partition is always the official SemEval gold test set for the target domain. We do **not** perform additional random test splits; all numbers reported here are therefore **comparable** across backbones for a given experiment setting.
 
 ### 2.3 Metrics
 
@@ -63,32 +61,32 @@ Positive $\Delta$ means predicted aspects **hurt** sentiment relative to oracle 
 
 ### 3.1 Overview
 
-The **pipeline** chains independently trained checkpoints. The ATE module emits, for each test sentence, a list of predicted aspect strings (with optional confidence). Each **(sentence, aspect)** string pair is passed to the ASC module, which returns a polarity label. Final **end-to-end** predictions are the union of predicted aspects with their predicted sentiments; evaluation uses standard matching against gold **(aspect, sentiment)** pairs encoded in the SemEval XML.
+The system cascades independently trained ATE and ASC modules. The ATE component emits, for each test sentence, a list of predicted aspect strings. Each **(sentence, aspect)** pair is then passed to the ASC module, which returns a polarity label. Final **end-to-end** predictions are the union of predicted aspects with their predicted sentiments; evaluation uses standard matching against gold **(aspect, sentiment)** pairs.
 
 ### 3.2 Models and training
 
-**Backbones** follow `pipeline/config.py`:
+**Backbones and hyperparameters** are as follows:
 
 - **BERT:** `bert-base-uncased` with **5** training epochs for both ATE and ASC, learning rate **3e-5**, batch size **16** (train) / **32** (eval), weight decay **0.01** where applicable.
 - **DeBERTa:** `microsoft/deberta-base` with ATE at batch size **8**, learning rate **2e-5**, **5** epochs; ASC at batch size **16**, learning rate **2e-5**, **3** epochs.
 
-ATE is implemented as token classification; ASC uses a **sentence-pair** encoding **[CLS] sentence [SEP] aspect [SEP]** (implementation details reside in the `ate/` and `asc/` packages). **Domain-specific** weights are trained separately for restaurant and laptop, yielding four ATE checkpoints and four ASC checkpoints per backbone family.
+ATE is formulated as token classification, whereas ASC uses a **sentence-pair** encoding **[CLS] sentence [SEP] aspect [SEP]**. **Domain-specific** weights are trained separately for restaurant and laptop.
 
 **Why ASC is evaluated twice.** The **gold-aspect** score answers: “How good is sentiment **given perfect targets**?” The **predicted-aspect** score answers: “What does a user actually get **after extraction**?” The gap between them isolates **cascade loss** attributable to span errors. In isolation, a high gold-aspect ASC with low predicted-aspect ASC points to **ATE** as the lever; when both are low, **ASC** may need better features or more data even with clean spans.
 
 ### 3.3 Cross-domain protocol
 
-For each backbone, we evaluate **eight** experiments: **(train domain, test domain)** $\in \{\text{restaurant}, \text{laptop}\}^2$, covering **in-domain** baselines and **both** cross-domain directions. ATE and ASC weights always come from the **same training domain**; only the **test XML** changes. This isolates **domain shift** at evaluation time while keeping the training recipe fixed.
+For each backbone, we evaluate **eight** experiments: **(train domain, test domain)** $\in \{\text{restaurant}, \text{laptop}\}^2$, covering **in-domain** baselines and **both** cross-domain directions. ATE and ASC weights always come from the **same training domain**; only the **test domain** changes. This isolates **domain shift** at evaluation time while keeping the training recipe fixed.
 
 ### 3.4 Analysis artifacts
 
-Beyond scalar metrics, the pipeline exports **confusion matrices** (absolute counts and **row-normalized** versions), **ATE span-error statistics** (missing, spurious, boundary errors), **end-to-end error-tracing** histograms, and **error example** JSONL files for qualitative inspection. Figures referenced below are copied into this `report/` directory with consistent `figXX_*` filenames.
+Beyond scalar metrics, we analyze **confusion matrices** (absolute counts and **row-normalized** versions), **ATE span-error statistics** (missing, spurious, boundary errors), **end-to-end error-tracing** histograms, and representative qualitative examples.
 
 ---
 
 ## 4 Experimental Setup
 
-**Table 1** lists the eight experiments (IDs match `pipeline/outputs/cross_domain_summary.json`). All results below come from that consolidated JSON produced by `python -m pipeline.run_cross_domain`.
+**Table 1** lists the eight experimental settings considered in this study.
 
 | ID | Train → Test | Backbone | Type |
 |----|----------------|----------|------|
@@ -101,11 +99,7 @@ Beyond scalar metrics, the pipeline exports **confusion matrices** (absolute cou
 | 7 | laptop → laptop | BERT | in-domain |
 | 8 | laptop → laptop | DeBERTa | in-domain |
 
-**Software.** Python **3.10+**, PyTorch with CUDA where available, Hugging Face `transformers` trainers, and project-local dataset builders. **Inference** uses the `final/` exported weights under `ate/ate_output_*` and `asc/asc_output_*` per domain and backbone.
-
-**Hardware and runtime.** Training was performed on NVIDIA GPUs with CUDA **12.x**-compatible PyTorch wheels as pinned by the project lockfile; exact wall-clock times vary by machine. Inference for the eight experiments is **I/O- and model-bound** but feasible to batch overnight on a single consumer GPU because test sets are modest by modern standards.
-
-**Reproducibility.** Provided that the required trained model directories are available, running `python -m pipeline.run_cross_domain` from the repository root regenerates per-experiment folders under `pipeline/outputs/<train_tag>_<model>/`, merges metrics into `cross_domain_summary.json`, and (unless `--skip_figures`) rebuilds plots under `pipeline/figures/`. This report’s tables and figures are **derived from** those artifacts rather than hand-tuned. Figure copies in `report/` are **bitwise duplicates** of selected PNGs under `pipeline/figures/` with filenames normalized for citation.
+**Implementation and hardware.** Experiments were implemented in Python with PyTorch and Hugging Face Transformers. Training was conducted on NVIDIA GPUs; exact runtimes varied by model and domain.
 
 ---
 
@@ -113,7 +107,7 @@ Beyond scalar metrics, the pipeline exports **confusion matrices** (absolute cou
 
 ### 5.1 Aggregate pipeline metrics
 
-**Table 2** reports ATE and ASC metrics and propagation gaps. Values are copied from `cross_domain_summary.json` (numeric literals preserved; trailing zeros omitted in the source where applicable).
+**Table 2** reports ATE and ASC metrics and propagation gaps.
 
 | ID | ATE P | ATE R | ATE F1 | ASC Acc (gold) | ASC m-F1 (gold) | ASC Acc (pred) | ASC m-F1 (pred) | Δ Acc | Δ m-F1 |
 |----|-------|-------|--------|----------------|-----------------|----------------|-----------------|-------|--------|
@@ -188,9 +182,9 @@ Figure 1 and Figure 2 plot **ATE F1** against **ASC accuracy / macro-F1 on predi
 
 ### 6.4 Example error cases
 
-Exported `error_examples_*.jsonl` files illustrate concrete failure modes. For instance, an **ATE miss** on *people* in “I trust the **people** at Go Sushi…” removes the chance to classify that aspect’s sentiment entirely (**ATE Miss → Sentiment Lost**). A **boundary error** on *sangria* versus *sangria's* can flip polarity when punctuation alters the substring seen by ASC (**ATE Boundary Error → Sentiment Wrong**). **ASC-only** errors include cases where the aspect string is correct but polarity is wrong (e.g., *staff* predicted **positive** where gold is **negative**), motivating **contrastive** or **negation-aware** training even when extraction is perfect.
+Representative error cases illustrate concrete failure modes. For instance, an **ATE miss** on *people* in “I trust the **people** at Go Sushi…” removes the chance to classify that aspect’s sentiment entirely (**ATE Miss → Sentiment Lost**). A **boundary error** on *sangria* versus *sangria's* can flip polarity when punctuation alters the substring seen by ASC (**ATE Boundary Error → Sentiment Wrong**). **ASC-only** errors include cases where the aspect string is correct but polarity is wrong (e.g., *staff* predicted **positive** where gold is **negative**), motivating **contrastive** or **negation-aware** training even when extraction is perfect.
 
-**Cross-domain qualitative themes (informal).** When ATE trains on restaurant text and tests on laptops, we expect **missed hardware attributes** (*battery*, *keyboard backlight*) and **spurious food-like** tokens if the tagger hallucinates domain-inappropriate spans. In the reverse direction, laptop-trained extractors may **under-segment** multi-word restaurant dish names. We do not manually quantify these patterns here; the **error-tracing** bars and **ATE error-type** histograms provide aggregate proxies, and future work could mine `ate_predictions_*.jsonl` for lexicon-level statistics.
+**Cross-domain qualitative themes (informal).** When ATE trains on restaurant text and tests on laptops, we expect **missed hardware attributes** (*battery*, *keyboard backlight*) and **spurious food-like** tokens if the tagger hallucinates domain-inappropriate spans. In the reverse direction, laptop-trained extractors may **under-segment** multi-word restaurant dish names. We do not manually quantify these patterns here; the **error-tracing** bars and **ATE error-type** histograms provide aggregate proxies, and future work could quantify these lexical effects more systematically.
 
 ---
 
@@ -207,24 +201,3 @@ We presented a **cascaded ATE → ASC** system for SemEval-2014 restaurant and l
 - Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. **BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.** NAACL 2019.
 
 - Pengcheng He, Xiaodong Liu, Jianfeng Gao, and Weizhu Chen. **DeBERTa: Decoding-enhanced BERT with Disentangled Attention.** ICLR 2021.
-
-- Hugging Face model documentation for `bert-base-uncased` and `microsoft/deberta-base` (accessed via the Transformers library used in training).
-
----
-
-## Appendix: Figure manifest
-
-| File | Description |
-|------|-------------|
-| `fig01_summary_ate_vs_asc_acc.png` | Summary bar chart: ATE F1 vs ASC accuracy (pred). |
-| `fig02_summary_ate_vs_asc_f1.png` | Summary bar chart: ATE F1 vs ASC macro-F1 (pred). |
-| `fig03_rest2rest_bert_confusion_matrix_norm.png` | In-domain restaurant, BERT — normalized ASC confusion. |
-| `fig04_rest2rest_bert_ate_span_errors.png` | In-domain restaurant, BERT — ATE error-type bars. |
-| `fig05_rest2rest_bert_e2e_error_tracing.png` | In-domain restaurant, BERT — E2E attribution bars. |
-| `fig06_lapt2lapt_deberta_confusion_matrix_norm.png` | In-domain laptop, DeBERTa — normalized ASC confusion. |
-| `fig07_lapt2lapt_deberta_ate_span_errors.png` | In-domain laptop, DeBERTa — ATE error-type bars. |
-| `fig08_lapt2lapt_deberta_e2e_error_tracing.png` | In-domain laptop, DeBERTa — E2E attribution bars. |
-| `fig09_lapt2rest_bert_e2e_error_tracing.png` | Cross-domain laptop → restaurant, BERT — E2E attribution. |
-| `fig10_rest2lapt_deberta_e2e_error_tracing.png` | Cross-domain restaurant → laptop, DeBERTa — E2E attribution. |
-
-All figures are copies of artifacts generated under `pipeline/figures/` by `pipeline.plot_figures` after `pipeline.run_cross_domain`.
